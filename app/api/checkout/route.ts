@@ -23,6 +23,12 @@ export async function POST(request: Request) {
   const session = await getStripe().checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
+    // Adaptive Pricing defaults to the Stripe Dashboard setting and would
+    // otherwise convert/display this in the buyer's local currency (e.g.
+    // £1.53 for a UK visitor) even though the line item is priced in USD —
+    // the "$1.99" number is the whole brand, so this is forced off here
+    // rather than left to a dashboard toggle someone could flip later.
+    adaptive_pricing: { enabled: false },
     line_items: [
       {
         price_data: {

@@ -16,11 +16,7 @@
  */
 
 import { getStripe } from '@/lib/stripe'
-import { serverClient } from '@/lib/supabase'
-import { presignedDownloadUrl } from '@/lib/s3'
-import { sendPurchaseConfirmation } from '@/lib/emails/send'
-import { generateRedemptionCode } from '@/lib/redemption-code'
-import { generateDownloadToken } from '@/lib/download-token'
+import { createOrGetPurchase } from '@/lib/purchase'
 import type Stripe from 'stripe'
 
 export async function POST(request: Request) {
@@ -55,70 +51,37 @@ export async function POST(request: Request) {
   const paymentIntentId = session.payment_intent as string
   const filmId = session.metadata?.filmId
   const email = session.customer_details?.email
-  const utm_source = session.metadata?.utm_source ?? null
-  const utm_medium = session.metadata?.utm_medium ?? null
-  const utm_campaign = session.metadata?.utm_campaign ?? null
-  const utm_content = session.metadata?.utm_content ?? null
-  const utm_term = session.metadata?.utm_term ?? null
 
   if (!paymentIntentId || !filmId) {
     console.error('[webhook] missing paymentIntentId or filmId', { paymentIntentId, filmId })
     return new Response('OK', { status: 200 })
   }
 
-  // Idempotency check — skip if purchase already recorded
-  const { data: existing } = await serverClient()
-    .from('purchases')
-    .select('id')
-    .eq('stripe_payment_id', paymentIntentId)
-    .single()
-
-  if (existing) {
-    console.log('[webhook] purchase already exists, skipping:', paymentIntentId)
-    return new Response('OK', { status: 200 })
-  }
-
-  const { data: film } = await serverClient()
-    .from('films')
-    .select('id, title, file_key')
-    .eq('id', filmId)
-    .single()
-
-  if (!film) {
-    console.error('[webhook] film not found:', filmId)
-    return new Response('OK', { status: 200 })
-  }
-
-  const downloadUrl = await presignedDownloadUrl(film.file_key)
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-  const redemptionCode = generateRedemptionCode()
-  const downloadToken = generateDownloadToken()
   const origin = new URL(request.url).origin
-  const ownerLink = `${origin}/api/download?token=${downloadToken}`
 
-  await serverClient()
-    .from('purchases')
-    .insert({
-      film_id: film.id,
-      email: email ?? '',
-      stripe_payment_id: paymentIntentId,
-      download_url: downloadUrl,
-      expires_at: expiresAt,
-      redemption_code: redemptionCode,
-      download_token: downloadToken,
-      utm_source,
-      utm_medium,
-      utm_campaign,
-      utm_content,
-      utm_term,
-    })
+  // createOrGetPurchase() is idempotent on stripe_payment_id (upsert), so
+  // no separate existence check is needed here — if the /success page's
+  // own load already created this purchase, this just returns that row
+  // (isNew: false) without sending a duplicate email.
+  const result = await createOrGetPurchase({
+    filmId,
+    email: email ?? '',
+    paymentIntentId,
+    origin,
+    utm: {
+      utm_source: session.metadata?.utm_source ?? undefined,
+      utm_medium: session.metadata?.utm_medium ?? undefined,
+      utm_campaign: session.metadata?.utm_campaign ?? undefined,
+      utm_content: session.metadata?.utm_content ?? undefined,
+      utm_term: session.metadata?.utm_term ?? undefined,
+    },
+  })
 
-  if (email) {
-    sendPurchaseConfirmation({ to: email, filmTitle: film.title, ownerLink, redemptionCode }).catch(
-      (err) => console.error('[webhook] email failed:', err)
-    )
+  if (!result) {
+    console.error('[webhook] film not found or purchase creation failed:', filmId)
+    return new Response('OK', { status: 200 })
   }
 
-  console.log('[webhook] purchase recorded and email queued for:', paymentIntentId)
+  console.log('[webhook] purchase recorded:', paymentIntentId, 'isNew:', result.isNew)
   return new Response('OK', { status: 200 })
 }

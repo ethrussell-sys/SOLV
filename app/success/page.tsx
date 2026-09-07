@@ -1,15 +1,12 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getStripe } from '@/lib/stripe'
-import { serverClient } from '@/lib/supabase'
-import { presignedDownloadUrl } from '@/lib/s3'
-import { sendPurchaseConfirmation } from '@/lib/emails/send'
-import { generateRedemptionCode } from '@/lib/redemption-code'
-import { generateDownloadToken } from '@/lib/download-token'
+import { createOrGetPurchase } from '@/lib/purchase'
 import { ID_TO_SLUG } from '@/lib/slug-map'
 import DownloadButton from './DownloadButton'
 import ShareSection from './ShareSection'
 import PurchaseTracker from './PurchaseTracker'
+import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 async function getOrCreatePurchase(sessionId: string, origin: string) {
@@ -23,52 +20,30 @@ async function getOrCreatePurchase(sessionId: string, origin: string) {
 
   if (!filmId || !email) return null
 
-  const { data: film } = await serverClient()
-    .from('films')
-    .select('id, title, file_key')
-    .eq('id', filmId)
-    .single()
+  // Previously this function ran its own separate upsert with no UTM
+  // fields at all — if it landed before the webhook, that purchase
+  // permanently lost attribution, since the webhook's own idempotency
+  // check would then skip it. Now both paths call the same function
+  // with the same session.metadata source, so whichever lands first
+  // captures UTM correctly.
+  const result = await createOrGetPurchase({
+    filmId,
+    email,
+    paymentIntentId,
+    origin,
+    utm: {
+      utm_source: session.metadata?.utm_source ?? undefined,
+      utm_medium: session.metadata?.utm_medium ?? undefined,
+      utm_campaign: session.metadata?.utm_campaign ?? undefined,
+      utm_content: session.metadata?.utm_content ?? undefined,
+      utm_term: session.metadata?.utm_term ?? undefined,
+    },
+  })
 
-  if (!film) return null
+  if (!result) return null
 
-  // Check if this purchase already exists to avoid resending the email on refresh
-  const { data: existing } = await serverClient()
-    .from('purchases')
-    .select('id, redemption_code, download_token')
-    .eq('stripe_payment_id', paymentIntentId)
-    .maybeSingle()
-
-  const isNew = !existing
-  const redemptionCode = existing?.redemption_code ?? generateRedemptionCode()
-  const downloadToken = existing?.download_token ?? generateDownloadToken()
-  const ownerLink = `${origin}/api/download?token=${downloadToken}`
-
-  const downloadUrl = await presignedDownloadUrl(film.file_key)
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-
-  await serverClient()
-    .from('purchases')
-    .upsert(
-      {
-        film_id: film.id,
-        email,
-        stripe_payment_id: paymentIntentId,
-        download_url: downloadUrl,
-        expires_at: expiresAt,
-        redemption_code: redemptionCode,
-        download_token: downloadToken,
-      },
-      { onConflict: 'stripe_payment_id', ignoreDuplicates: false }
-    )
-
-  if (isNew) {
-    sendPurchaseConfirmation({ to: email, filmTitle: film.title, ownerLink, redemptionCode }).catch(
-      (err) => console.error('Purchase email failed:', err)
-    )
-  }
-
-  const slug = ID_TO_SLUG[film.id] ?? film.id
-  return { film, email, downloadUrl, slug }
+  const slug = ID_TO_SLUG[result.film.id] ?? result.film.id
+  return { film: result.film, email, slug, purchaseToken: result.purchaseToken }
 }
 
 export default async function SuccessPage(props: {
@@ -92,14 +67,16 @@ export default async function SuccessPage(props: {
     )
   }
 
-  const { film, email, downloadUrl, slug } = result
+  const { film, email, slug, purchaseToken } = result
 
   return (
     <>
     <PurchaseTracker filmId={film.id} filmSlug={slug} />
-    <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '80px', paddingBottom: '80px' }}>
+    <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '64px', paddingBottom: '80px' }}>
 
       <div style={{ width: '100%', maxWidth: '384px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px', textAlign: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
+        <Wordmark size={12} tracking="0.3em" color={tokens.color.muted2} fontFamily={tokens.font.body} />
+
         <div style={{ width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.blue }}>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
@@ -107,18 +84,33 @@ export default async function SuccessPage(props: {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, margin: 0 }}>You own it.</h1>
-          <p style={{ color: tokens.color.muted2, fontSize: '14px', lineHeight: 1.6, margin: 0 }}>
-            <span style={{ color: tokens.color.ink, fontWeight: 500 }}>{film.title}</span> is yours forever.
+          <h1 style={{
+            fontFamily: tokens.font.display,
+            fontSize: 'clamp(2.8rem, 12vw, 4rem)',
+            lineHeight: 1,
+            textTransform: 'uppercase',
+            letterSpacing: '-0.5px',
+            margin: 0,
+          }}>
+            Your download.
+            <br />
+            Ready now.
+          </h1>
+          <p style={{ color: tokens.color.muted2, fontSize: '14px', lineHeight: 1.6, margin: '8px 0 0' }}>
+            <span style={{ color: tokens.color.ink, fontWeight: 500 }}>{film.title}</span> is yours to keep — no account, no subscription, no catch.
             <br />
             Download link sent to {email}.
           </p>
         </div>
 
-        <DownloadButton url={downloadUrl} title={film.title} />
+        <DownloadButton title={film.title} filmId={film.id} purchaseToken={purchaseToken} />
 
         <p style={{ color: tokens.color.muted2, fontSize: '12px', margin: 0 }}>
-          Link expires in 24 hours. Check your email for a permanent copy.
+          Download didn&apos;t start?{' '}
+          <a href={`/api/download?token=${purchaseToken}`} style={{ color: tokens.color.blue, textDecoration: 'underline' }}>
+            Tap to retry
+          </a>
+          {' '}— or find it anytime in your confirmation email.
         </p>
 
         <ShareSection watchUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/watch/${slug}`} />

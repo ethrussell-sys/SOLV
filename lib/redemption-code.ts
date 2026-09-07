@@ -6,6 +6,6 @@ function segment(n: number): string {
 
 export function generateRedemptionCode(): string {
   // New codes use the SOLV- prefix. Already-issued ARCLO- codes still work —
-  // app/api/redeem/route.ts matches on the stored value directly, not a prefix.
+  // app/api/download/route.ts matches on the stored value directly, not a prefix.
   return `SOLV-${segment(4)}-${segment(4)}`
 }

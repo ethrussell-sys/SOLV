@@ -22,6 +22,16 @@ export default function AddToHomeScreen() {
 
     if (isIOS) {
       const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS/.test(ua)
+      // Deliberate: navigator.userAgent only exists client-side, and this
+      // component is server-rendered on first load. Moving this into a
+      // lazy useState initializer (the usual fix for this rule) would run
+      // during SSR too — either crashing on missing `navigator`, or, if
+      // guarded, rendering `false` on the server and the real value on the
+      // client's first paint for every iOS Safari visitor, which is a
+      // genuine hydration mismatch. The effect-based check here is the
+      // hydration-safe pattern: server and first client paint agree
+      // (nothing shown), and this only ever adds the banner post-mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (isSafari) { setPlatform('ios'); setVisible(true) }
     } else if (isAndroidChrome) {
       const handler = (e: Event) => {

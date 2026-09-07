@@ -1,12 +1,9 @@
 import { getStripe } from '@/lib/stripe'
-import { serverClient } from '@/lib/supabase'
-import { presignedDownloadUrl } from '@/lib/s3'
-import { sendPurchaseConfirmation } from '@/lib/emails/send'
-import { generateRedemptionCode } from '@/lib/redemption-code'
-import { generateDownloadToken } from '@/lib/download-token'
+import { createOrGetPurchase } from '@/lib/purchase'
 
 export async function POST(request: Request) {
-  const { paymentIntentId, email } = await request.json()
+  const body = await request.json()
+  const { paymentIntentId, email } = body
 
   if (!paymentIntentId) {
     return Response.json({ error: 'paymentIntentId required' }, { status: 400 })
@@ -20,53 +17,34 @@ export async function POST(request: Request) {
 
   const filmId = intent.metadata.filmId
 
-  const { data: film } = await serverClient()
-    .from('films')
-    .select('id, title, file_key')
-    .eq('id', filmId)
-    .single()
+  // Metadata set at PaymentIntent-creation time is the authoritative
+  // source (same trust model as filmId above); the client-sent body is
+  // only a fallback for older PaymentIntents created before UTM was
+  // threaded into metadata.
+  const utm = {
+    utm_source: intent.metadata.utm_source ?? body.utm_source ?? undefined,
+    utm_medium: intent.metadata.utm_medium ?? body.utm_medium ?? undefined,
+    utm_campaign: intent.metadata.utm_campaign ?? body.utm_campaign ?? undefined,
+    utm_content: intent.metadata.utm_content ?? body.utm_content ?? undefined,
+    utm_term: intent.metadata.utm_term ?? body.utm_term ?? undefined,
+  }
 
-  if (!film) {
+  const origin = new URL(request.url).origin
+
+  const result = await createOrGetPurchase({
+    filmId,
+    email: email ?? '',
+    paymentIntentId,
+    origin,
+    utm,
+  })
+
+  if (!result) {
     return Response.json({ error: 'Film not found' }, { status: 404 })
   }
 
-  const downloadUrl = await presignedDownloadUrl(film.file_key)
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-
-  // Preserve existing redemption code and download token on re-attempts
-  const { data: existing } = await serverClient()
-    .from('purchases')
-    .select('redemption_code, download_token')
-    .eq('stripe_payment_id', paymentIntentId)
-    .maybeSingle()
-
-  const isNew = !existing
-  const redemptionCode = existing?.redemption_code ?? generateRedemptionCode()
-  const downloadToken = existing?.download_token ?? generateDownloadToken()
-  const origin = new URL(request.url).origin
-  const ownerLink = `${origin}/api/download?token=${downloadToken}`
-
-  await serverClient()
-    .from('purchases')
-    .upsert(
-      {
-        film_id: film.id,
-        email: email ?? '',
-        stripe_payment_id: paymentIntentId,
-        download_url: downloadUrl,
-        expires_at: expiresAt,
-        redemption_code: redemptionCode,
-        download_token: downloadToken,
-      },
-      { onConflict: 'stripe_payment_id', ignoreDuplicates: false }
-    )
-
-  // Send email without blocking the response — owner link is the critical path
-  if (email && isNew) {
-    sendPurchaseConfirmation({ to: email, filmTitle: film.title, ownerLink, redemptionCode }).catch(
-      (err) => console.error('Purchase email failed:', err)
-    )
-  }
-
-  return Response.json({ downloadUrl, filmTitle: film.title })
+  return Response.json({
+    filmTitle: result.film.title,
+    purchaseToken: result.purchaseToken,
+  })
 }

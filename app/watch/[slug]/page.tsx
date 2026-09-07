@@ -7,6 +7,7 @@ import WaitlistPanel from './WaitlistPanel'
 import AgeGate from './AgeGate'
 import ShareButton from './ShareButton'
 import TrailerPlayer from './TrailerPlayer'
+import TeaserPlayer from './TeaserPlayer'
 import PageTracker from './PageTracker'
 import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
@@ -109,13 +110,16 @@ export default async function WatchPage(props: {
       alignItems: 'center',
     }}>
 
+      <ShareButton filmId={film.id} filmSlug={slug} />
+
       <div style={{
         width: '100%',
         maxWidth: '480px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '48px 24px 40px',
+        // Bottom padding matches the pinned buy bar's height so content never hides behind it
+        padding: isUS ? '48px 24px calc(100px + env(safe-area-inset-bottom))' : '48px 24px 40px',
         gap: '20px',
       }}>
 
@@ -158,19 +162,12 @@ export default async function WatchPage(props: {
           />
         )}
         {directVideoUrl && (
-          <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%' }}>
-            <div style={{ position: 'absolute', inset: 0, borderRadius: '12px', overflow: 'hidden', backgroundColor: tokens.color.surface }}>
-              <video
-                src={directVideoUrl}
-                autoPlay
-                muted
-                loop
-                playsInline
-                controls
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-          </div>
+          <TeaserPlayer
+            src={directVideoUrl}
+            title={`${film.title} — trailer`}
+            filmId={film.id}
+            filmSlug={slug}
+          />
         )}
 
         {/* Synopsis */}
@@ -190,17 +187,42 @@ export default async function WatchPage(props: {
           </p>
         )}
 
-        {/* Share */}
-        <ShareButton filmId={film.id} filmSlug={slug} />
-
-        {/* Buy button (US) or waitlist (non-US) → incoming note */}
+        {/* Buy button (US, pinned to a frosted bottom bar) or waitlist (non-US) → incoming note */}
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div data-track="buy-section" style={{ width: '100%' }}>
-            {isUS
-              ? <BuyButton filmId={film.id} price={film.price} title={film.title} filmSlug={slug} />
-              : <WaitlistPanel slug={slug} country={country!} />
-            }
-          </div>
+          {isUS ? (
+            <div
+              data-track="buy-section"
+              style={{
+                position: 'fixed',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 40,
+                background: 'rgba(0,0,0,0.6)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                padding: '12px 24px calc(12px + env(safe-area-inset-bottom))',
+              }}
+            >
+              {/* Fades scrolling content into the bar instead of a hard hairline */}
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: '-24px',
+                height: '24px',
+                background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.6))',
+                pointerEvents: 'none',
+              }} />
+              <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto' }}>
+                <BuyButton filmId={film.id} price={film.price} title={film.title} filmSlug={slug} />
+              </div>
+            </div>
+          ) : (
+            <div data-track="buy-section" style={{ width: '100%' }}>
+              <WaitlistPanel slug={slug} country={country!} />
+            </div>
+          )}
 
           {note && (
             <div style={{

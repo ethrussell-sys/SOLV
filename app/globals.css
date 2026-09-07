@@ -116,3 +116,20 @@ body {
   display: block;
   align-self: flex-start;
 }
+
+/* Watch page — pinned buy button */
+.solv-buy-btn {
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+.solv-buy-btn:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
+}
+
+/* Watch page — top-right share icon */
+.solv-share-icon-btn {
+  transition: transform 0.12s ease, background-color 0.2s ease;
+}
+.solv-share-icon-btn:active {
+  transform: scale(0.92);
+}

@@ -75,34 +75,59 @@ export default function ShareButton({
   }
 
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    <div style={{
+      position: 'fixed',
+      top: 'calc(16px + env(safe-area-inset-top))',
+      right: '16px',
+      zIndex: 30,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      gap: '8px',
+    }}>
       <button
         type="button"
+        className="solv-share-icon-btn"
         onMouseDown={() => { suppressBlurRef.current = true }}
         onClick={handleToggle}
+        aria-label={copied ? 'Link copied' : 'Share this film'}
         style={{
-          background: 'none',
-          border: 'none',
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          background: 'rgba(255,255,255,0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '0.5px solid rgba(255,255,255,0.12)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           cursor: 'pointer',
-          color: open || copied ? tokens.color.muted : tokens.color.muted2,
-          fontSize: '12px',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          padding: '8px 16px',
-          transition: 'color 0.2s ease',
+          color: tokens.color.ink,
+          padding: 0,
         }}
       >
-        {copied ? 'Link copied.' : 'Share this film'}
+        {copied ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3v12" />
+            <path d="M7 8l5-5 5 5" />
+            <path d="M5 13v6a2 2 0 002 2h10a2 2 0 002-2v-6" />
+          </svg>
+        )}
       </button>
 
-      {/* Slide-in panel — always in DOM for smooth exit animation */}
+      {/* Note panel — always in DOM for smooth exit animation */}
       <div
         style={{
-          width: '100%',
+          width: '220px',
           overflow: 'hidden',
-          height: open ? '46px' : '0',
+          height: open ? '40px' : '0',
           opacity: open ? 1 : 0,
-          transform: open ? 'translateY(0)' : 'translateY(4px)',
+          transform: open ? 'translateY(0)' : 'translateY(-4px)',
           transition: 'height 0.22s ease-out, opacity 0.18s ease-out, transform 0.22s ease-out',
           pointerEvents: open ? 'auto' : 'none',
         }}
@@ -117,7 +142,7 @@ export default function ShareButton({
           placeholder="Add a note..."
           style={{
             width: '100%',
-            height: '46px',
+            height: '40px',
             background: tokens.color.surface,
             border: `1px solid ${tokens.color.line}`,
             borderRadius: '12px',

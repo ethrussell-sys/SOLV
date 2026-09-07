@@ -6,11 +6,15 @@ import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 export default function AgeGate({ slug }: { slug: string }) {
-  const [visible, setVisible] = useState(false)
+  // Fail-closed: the gate is visible by default, on both the server render
+  // and the client's first paint, so there's no flash of ungated content
+  // before this effect can check localStorage. It's only ever hidden once
+  // we've confirmed (client-only) that this visitor already passed it.
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const key = `age-confirmed-${slug}`
-    if (!localStorage.getItem(key)) setVisible(true)
+    if (localStorage.getItem(key)) setVisible(false)
   }, [slug])
 
   function confirm() {
