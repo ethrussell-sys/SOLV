@@ -112,13 +112,13 @@ export default async function WatchPage(props: {
     }}>
 
       <Link
-        href="/films"
-        aria-label="Browse all films"
+        href="/"
+        aria-label="Go to homepage"
         style={{
           position: 'fixed',
           top: 'calc(16px + env(safe-area-inset-top))',
           left: '16px',
-          zIndex: 30,
+          zIndex: 50,
           width: '36px',
           height: '36px',
           borderRadius: '50%',
@@ -131,11 +131,11 @@ export default async function WatchPage(props: {
           justifyContent: 'center',
           color: tokens.color.ink,
           textDecoration: 'none',
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
         }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 6 9 12 15 18" />
-        </svg>
+        <img src="/solv-mark.png" alt="" width={20} height={20} style={{ display: 'block' }} />
       </Link>
 
       <ShareButton filmId={film.id} filmSlug={slug} />
