@@ -99,11 +99,13 @@ export default function ShareButton({
       position: 'fixed',
       top: 'calc(16px + env(safe-area-inset-top))',
       right: '16px',
-      zIndex: 30,
+      zIndex: 50,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-end',
       gap: '8px',
+      transform: 'translateZ(0)',
+      WebkitTransform: 'translateZ(0)',
     }}>
       <button
         type="button"

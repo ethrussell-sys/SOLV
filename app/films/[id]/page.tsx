@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { serverClient } from '@/lib/supabase'
 import BuyButton from './BuyButton'
+import BackButton from './BackButton'
 import ShareButton from '@/app/watch/[slug]/ShareButton'
 import { tokens } from '@/lib/tokens'
 
@@ -76,6 +77,8 @@ export default async function FilmPage(props: {
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: tokens.color.bg, color: tokens.color.ink, display: 'flex', flexDirection: 'column', paddingBottom: '180px' }}>
+
+      <BackButton />
 
       {/* ── Hero ── */}
       <div className="film-hero" style={{ position: 'relative', width: '100%', backgroundColor: tokens.color.surface, flexShrink: 0 }}>
