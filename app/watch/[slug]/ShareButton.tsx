@@ -127,6 +127,8 @@ export default function ShareButton({
           cursor: 'pointer',
           color: tokens.color.ink,
           padding: 0,
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
         }}
       >
         {copied ? (

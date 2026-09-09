@@ -64,7 +64,7 @@ export default async function HomePage() {
           </p>
 
           <Link
-            href={films.length > 0 ? '#films' : '/films'}
+            href="/films"
             className="explore-link"
             style={{ animation: 'fade-up 0.8s ease-out 0.3s both' }}
           >
