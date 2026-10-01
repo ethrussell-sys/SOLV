@@ -60,7 +60,7 @@ export default async function HomePage() {
             margin: '0 0 32px',
             animation: 'fade-up 0.8s ease-out 0.15s both',
           }}>
-            One tap.&nbsp;&nbsp;$1.99.&nbsp;&nbsp;Yours forever.
+            One tap.&nbsp;&nbsp;$1.99.&nbsp;&nbsp;No expiry.
           </p>
 
           <Link
@@ -108,14 +108,6 @@ export default async function HomePage() {
         <p style={{ color: tokens.color.muted2, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', margin: '8px 0 0' }}>
           The films that matter.
         </p>
-        <div style={{ marginTop: '24px', display: 'flex', gap: '20px' }}>
-          <Link
-            href="/terms"
-            style={{ color: tokens.color.muted2, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}
-          >
-            Terms of Service
-          </Link>
-        </div>
       </footer>
 
     </main>

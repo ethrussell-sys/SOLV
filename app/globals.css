@@ -121,9 +121,15 @@ body {
 .solv-buy-btn {
   transition: transform 0.12s ease, filter 0.12s ease;
 }
-.solv-buy-btn:active {
+.solv-buy-btn:active:not(:disabled) {
   transform: scale(0.97);
   filter: brightness(0.92);
+}
+
+/* Site footer — keep Terms/Privacy clear of a fixed bottom buy bar
+   (films/[id] and US watch pages), which now includes the consent box */
+body:has([data-fixed-buybar]) .site-footer {
+  padding-bottom: calc(210px + env(safe-area-inset-bottom));
 }
 
 /* Watch page — top-right share icon */

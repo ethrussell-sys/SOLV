@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getStripe } from '@/lib/stripe'
-import { createOrGetPurchase } from '@/lib/purchase'
+import { createOrGetPurchase, consentFromMetadata } from '@/lib/purchase'
 import { ID_TO_SLUG } from '@/lib/slug-map'
 import DownloadButton from './DownloadButton'
 import ShareSection from './ShareSection'
@@ -38,6 +38,7 @@ async function getOrCreatePurchase(sessionId: string, origin: string) {
       utm_content: session.metadata?.utm_content ?? undefined,
       utm_term: session.metadata?.utm_term ?? undefined,
     },
+    consent: consentFromMetadata(session.metadata),
   })
 
   if (!result) return null

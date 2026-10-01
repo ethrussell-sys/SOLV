@@ -11,6 +11,19 @@ type CreatePurchaseParams = {
   paymentIntentId: string
   origin: string
   utm?: UtmParams
+  consent?: PurchaseConsent | null
+}
+
+// UK/EU immediate-supply consent, ticked at the buy button and carried
+// through Stripe metadata (Checkout session or PaymentIntent) so it's
+// recorded server-side rather than trusted from a later client request.
+export type PurchaseConsent = { immediateSupply: true; at: string }
+
+export function consentFromMetadata(
+  metadata: Record<string, string> | null | undefined
+): PurchaseConsent | null {
+  if (metadata?.consent_immediate_supply !== 'true' || !metadata.consent_at) return null
+  return { immediateSupply: true, at: metadata.consent_at }
 }
 
 type PurchaseRow = {
@@ -42,6 +55,7 @@ export async function createOrGetPurchase({
   paymentIntentId,
   origin,
   utm,
+  consent,
 }: CreatePurchaseParams): Promise<CreatePurchaseResult | null> {
   const db = serverClient()
 
@@ -77,6 +91,12 @@ export async function createOrGetPurchase({
         utm_campaign: utm?.utm_campaign ?? null,
         utm_content: utm?.utm_content ?? null,
         utm_term: utm?.utm_term ?? null,
+        // Only written when present, so a caller without consent metadata
+        // can never overwrite a consent another path already recorded.
+        ...(consent && {
+          consent_immediate_supply: consent.immediateSupply,
+          consent_at: consent.at,
+        }),
       },
       { onConflict: 'stripe_payment_id', ignoreDuplicates: false }
     )

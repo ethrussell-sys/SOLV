@@ -147,7 +147,7 @@ export default async function WatchPage(props: {
         flexDirection: 'column',
         alignItems: 'center',
         // Bottom padding matches the pinned buy bar's height so content never hides behind it
-        padding: isUS ? '48px 24px calc(100px + env(safe-area-inset-bottom))' : '48px 24px 40px',
+        padding: '48px 24px 40px',
         gap: '20px',
       }}>
 
@@ -220,6 +220,7 @@ export default async function WatchPage(props: {
           {isUS ? (
             <div
               data-track="buy-section"
+              data-fixed-buybar
               style={{
                 position: 'fixed',
                 left: 0,

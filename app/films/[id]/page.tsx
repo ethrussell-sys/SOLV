@@ -76,7 +76,7 @@ export default async function FilmPage(props: {
   const slug = (film.slug as string | null) ?? null
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: tokens.color.bg, color: tokens.color.ink, display: 'flex', flexDirection: 'column', paddingBottom: '180px' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: tokens.color.bg, color: tokens.color.ink, display: 'flex', flexDirection: 'column', paddingBottom: '40px' }}>
 
       <BackButton />
 
@@ -183,7 +183,7 @@ export default async function FilmPage(props: {
       </div>
 
       {/* ── Buy button fixed to bottom ── */}
-      <div style={{
+      <div data-fixed-buybar style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
