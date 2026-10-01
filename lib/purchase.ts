@@ -14,16 +14,20 @@ type CreatePurchaseParams = {
   consent?: PurchaseConsent | null
 }
 
-// UK/EU immediate-supply consent, ticked at the buy button and carried
+// UK/EU immediate-supply consent, given by tapping buy and carried
 // through Stripe metadata (Checkout session or PaymentIntent) so it's
 // recorded server-side rather than trusted from a later client request.
+// fallbackAt covers wallet PaymentIntents, which are created before the
+// tap and so carry no consent_at of their own.
 export type PurchaseConsent = { immediateSupply: true; at: string }
 
 export function consentFromMetadata(
-  metadata: Record<string, string> | null | undefined
+  metadata: Record<string, string> | null | undefined,
+  fallbackAt?: string
 ): PurchaseConsent | null {
-  if (metadata?.consent_immediate_supply !== 'true' || !metadata.consent_at) return null
-  return { immediateSupply: true, at: metadata.consent_at }
+  if (metadata?.consent_immediate_supply !== 'true') return null
+  const at = metadata.consent_at ?? fallbackAt
+  return at ? { immediateSupply: true, at } : null
 }
 
 type PurchaseRow = {

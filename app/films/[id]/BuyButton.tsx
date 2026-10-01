@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import type { Stripe, PaymentRequest } from '@stripe/stripe-js'
@@ -8,6 +7,7 @@ import { readUtm } from '@/lib/utm'
 import { track } from '@/lib/track'
 import { getVisitRecord } from '@/lib/session'
 import { tokens } from '@/lib/tokens'
+import { CONSENT_TEXT } from '@/lib/consent'
 
 type Props = { filmId: string; price: number; title: string; filmSlug?: string }
 
@@ -45,7 +45,6 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
   const [phase, setPhase] = useState<Phase>('checking')
   const [purchaseToken, setPurchaseToken] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
-  const [consented, setConsented] = useState(false)
   const [walletReady, setWalletReady] = useState(false)
   const walletRequestedRef = useRef(false)
   const stripeRef = useRef<Stripe | null>(null)
@@ -77,11 +76,12 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
     init().catch(() => setPhase('card'))
   }, [filmId, price, title])
 
-  // The PaymentIntent is created only once consent is ticked (the server
-  // refuses without it), but still before the tap: pr.show() has to run
-  // synchronously inside the click, so the intent must already exist.
+  // pr.show() has to run synchronously inside the tap, so the
+  // PaymentIntent is created ahead of it. Consent is the tap itself (the
+  // notice sits under the button); /api/purchase stamps consent_at when
+  // the paid purchase is recorded.
   useEffect(() => {
-    if (phase !== 'apple-pay' || !consented || walletRequestedRef.current) return
+    if (phase !== 'apple-pay' || walletRequestedRef.current) return
     const stripe = stripeRef.current
     const pr = prRef.current
     if (!stripe || !pr) return
@@ -180,7 +180,7 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
     }
 
     prepareWallet(stripe, pr).catch(() => setPhase('card'))
-  }, [phase, consented, filmId, filmSlug])
+  }, [phase, filmId, filmSlug])
 
   async function handleRegularCheckout() {
     track({ event_type: 'buy_button_click', film_id: filmId, film_slug: filmSlug })
@@ -278,43 +278,23 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
 
   const isProcessing = phase === 'processing'
 
-  const consentBox = (
-    <label
-      className="flex items-start gap-2.5 cursor-pointer select-none text-left"
-      style={{ color: tokens.color.muted2, fontSize: '12px', lineHeight: 1.5 }}
-    >
-      <input
-        type="checkbox"
-        required
-        checked={consented}
-        onChange={(e) => setConsented(e.target.checked)}
-        disabled={isProcessing}
-        className="mt-[2px] shrink-0 w-4 h-4 cursor-pointer"
-        style={{ accentColor: tokens.color.blue }}
-      />
-      <span>
-        I want my download to start immediately, and I understand I lose my 14-day right
-        to cancel once it&apos;s available. I agree to the{' '}
-        <Link href="/terms" target="_blank" className="underline" style={{ color: tokens.color.muted }}>
-          Terms
-        </Link>
-        .
-      </span>
-    </label>
+  const consentNote = (
+    <p className="text-center" style={{ color: tokens.color.muted2, fontSize: '12px', lineHeight: 1.5, margin: 0 }}>
+      {CONSENT_TEXT}
+    </p>
   )
 
   // ── Apple Pay / Google Pay button ─────────────────────────────────────────
   if (phase === 'apple-pay' || phase === 'checking') {
     return (
       <div className="flex flex-col gap-3">
-        {consentBox}
         <button
           onClick={() => {
             track({ event_type: 'buy_button_click', film_id: filmId, film_slug: filmSlug })
             prRef.current?.show()
           }}
           onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
-          disabled={isProcessing || phase === 'checking' || !consented || !walletReady}
+          disabled={isProcessing || phase === 'checking' || !walletReady}
           className="w-full py-[18px] rounded-2xl font-semibold tracking-wide active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-40"
           style={{ backgroundColor: tokens.color.bg, border: `1.5px solid ${tokens.color.line2}` }}
           aria-label={`Buy ${title} with Apple Pay`}
@@ -330,6 +310,7 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
             </>
           )}
         </button>
+        {consentNote}
       </div>
     )
   }
@@ -337,11 +318,10 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
   // ── Regular checkout fallback ─────────────────────────────────────────────
   return (
     <div className="flex flex-col gap-3">
-      {consentBox}
       <button
         onClick={handleRegularCheckout}
         onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
-        disabled={isProcessing || !consented}
+        disabled={isProcessing}
         className="solv-buy-btn w-full disabled:opacity-40"
         style={{
           height: '48px',
@@ -353,12 +333,13 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
           fontWeight: 600,
           fontSize: '16px',
           letterSpacing: '-0.01em',
-          cursor: isProcessing || !consented ? 'default' : 'pointer',
+          cursor: isProcessing ? 'default' : 'pointer',
         }}
         aria-label={`Buy ${title} for $${price.toFixed(2)}`}
       >
         {isProcessing ? 'Processing…' : `Own it — $${price.toFixed(2)}`}
       </button>
+      {consentNote}
     </div>
   )
 }

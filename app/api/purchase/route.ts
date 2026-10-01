@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     paymentIntentId,
     origin,
     utm,
-    consent: consentFromMetadata(intent.metadata),
+    consent: consentFromMetadata(intent.metadata, new Date().toISOString()),
   })
 
   if (!result) {
