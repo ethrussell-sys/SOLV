@@ -127,7 +127,7 @@ body {
 }
 
 /* Site footer — keep Terms/Privacy clear of a fixed bottom buy bar
-   (films/[id] and US watch pages), which now includes the consent box */
+   (films/[id] and US watch pages), including the consent note under it */
 body:has([data-fixed-buybar]) .site-footer {
   padding-bottom: calc(210px + env(safe-area-inset-bottom));
 }
