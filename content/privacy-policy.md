@@ -6,7 +6,7 @@ This policy explains what personal information Sølv collects when you use solvs
 
 ## 1. Who we are
 
-Sølv is a film distribution service run by its founding team ("Sølv", "we", "us"). Sølv is currently in pre-launch, and its operating company is being formed. We'll add our registered company details here once that's complete.
+Sølv is a film distribution service ("Sølv", "we", "us").
 
 For anything about your data, email **legal@solvscreen.com**.
 

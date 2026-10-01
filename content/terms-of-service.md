@@ -1,94 +1,29 @@
-# Sølv Terms of Service
+# Terms of Service
 
 **Last updated:** 1 October 2026
 
-These terms apply when you browse solvscreen.com or buy a film from Sølv. Please read them before you buy. By completing a purchase, you agree to them.
+These terms govern your use of Sølv and any purchase you make at solvscreen.com ("Sølv," "we," "us"). By using Sølv, you agree to them.
 
-## 1. Who we are
+**The service.** Sølv is a direct-to-consumer film distribution service. We let you buy films directly and download them, DRM-free, to your own devices.
 
-Sølv is a film distribution service run by its founding team ("Sølv", "we", "us"). Sølv is currently in pre-launch, and its operating company is being formed. We'll add our registered company details here once that's complete.
+**Your purchase.** When you buy a film on Sølv, you receive a personal, non-transferable licence to download it for your own viewing. Your download is DRM-free and yours to keep. The licence is for personal use only; it does not transfer ownership of the underlying work, and it does not grant any right to copy, resell, redistribute, or publicly screen the film. If a film later becomes unavailable on Sølv, any copy you have already downloaded remains yours.
 
-For questions about these terms, or help with a purchase, email **legal@solvscreen.com**.
+**Payment.** Prices are shown at checkout and charged at the time of purchase. Payments are processed by our third-party payment provider. We do not store your full card details.
 
-## 2. What you're buying
+**Right to cancel.** Because each film is digital content delivered immediately, you agree that we begin supplying it as soon as you complete checkout, and you acknowledge that you lose your statutory 14-day right to cancel once your download begins. This does not affect your rights if a film is faulty.
 
-When you buy a film on Sølv, you buy a **personal licence to download a digital copy of that film and watch it**, for your own private, non-commercial use.
+**Refunds.** Because films are delivered digitally and can be downloaded immediately, purchases are generally final. If a film fails to download or play correctly and we cannot resolve it, contact us and we will make it right, including a refund where appropriate. This does not affect your statutory rights as a consumer.
 
-- There's no subscription and no account required.
-- Your file is **DRM-free and has no expiry**. Once downloaded, it plays on your device with no time limit and no check-in with us.
-- You're buying a licence to watch the film, not the copyright in it. The film belongs to its filmmakers and rights holders.
+**Acceptable use.** You agree not to copy, reproduce, redistribute, sell, rent, or sublicense any film; publicly perform or screen a film outside your personal use; remove or circumvent any attribution, watermark, or security measure; or use Sølv in any way that is unlawful or infringes the rights of others. We may suspend access that breaches these terms.
 
-## 3. Downloads
+**Intellectual property.** Films on Sølv are owned by their respective filmmakers and rights holders and are licensed to you on the terms above. The Sølv name, brand, site, and software are ours and are protected by law.
 
-- After payment, we'll show you a download link on screen and email it to you.
-- Each purchase includes **up to 3 downloads**. If you need a new link, use the "re-send my link" option or email us.
-- **Please keep a copy of your file.** We store films so you can download them, but we can't guarantee a film will stay available on Sølv forever. A filmmaker's rights, for example, may end. If a film is removed, the copy you've already downloaded is still yours to watch.
-- If you have trouble downloading, contact us and we'll help.
+**Availability.** We work to keep Sølv available and performing well, but we do not guarantee uninterrupted access. We may add, change, or remove films and features.
 
-## 4. What you can and can't do
+**Disclaimers and liability.** Sølv is provided "as is." To the fullest extent permitted by law, we disclaim implied warranties and are not liable for indirect, incidental, or consequential damages. Nothing here limits liability that cannot be limited by law. Where our liability is not excluded, it is limited to the amount you paid for the affected purchase.
 
-You may download the film to your own devices and watch it privately, alone or with your household.
+**Changes to these terms.** We may update these terms from time to time. Continued use of Sølv after an update means you accept the revised terms.
 
-You may not:
-- sell, rent, share, upload or otherwise distribute the film or your download link;
-- show the film publicly or charge anyone to watch it;
-- copy, edit or remove any credits or notices from the film, except for your own personal backup;
-- use the film, or any part of it, to train AI models or build datasets.
+**Governing law.** These terms are governed by the laws of the State of New York, USA.
 
-If you break these rules, we may disable your download link. Your consumer rights are not affected.
-
-## 5. Prices and payment
-
-- Prices are shown in **US dollars** before you pay and include any taxes we're required to charge.
-- Payments are processed securely by Stripe. We don't see or store your full card details.
-- We may change prices for future purchases, but never for a purchase you've already made.
-
-## 6. Cancellations and refunds
-
-**If you're in the UK or the EU:** you normally have 14 days to cancel a digital purchase. Because your film is available to download immediately, at checkout we ask you to agree that your download starts straight away and that you **lose this 14-day cancellation right once the download is made available**. If you don't give that agreement, you can't complete the purchase.
-
-**Everyone:** if your file is faulty, won't download, or isn't the film you paid for, contact us within 30 days and we'll fix it, replace it or refund you.
-
-Apart from that, all sales are final. Nothing in these terms affects your legal rights as a consumer.
-
-## 7. Films and availability
-
-- Films on Sølv are supplied by filmmakers and rights holders, who confirm to us that they have the right to distribute them.
-- We may add, change or remove films at any time. If a film you bought is removed, section 3 applies.
-- Descriptions, trailers and teasers are provided in good faith but may differ slightly from the full film.
-
-## 8. Filmmakers
-
-If you're a filmmaker or rights holder, your relationship with Sølv is governed by your **separate distribution agreement**. Whenever you submit a film, you confirm that:
-- you own or control all the rights needed for Sølv to distribute it, including music, footage and performances;
-- the film doesn't infringe anyone else's rights or break any law.
-
-You agree to cover Sølv's losses if those statements turn out to be untrue.
-
-## 9. Using the site
-
-Please don't misuse solvscreen.com. That includes trying to bypass download limits, scraping content, interfering with the site's security, or using it for anything unlawful. The Sølv name, logo and site design belong to us.
-
-## 10. Our liability
-
-- If we break these terms, we're responsible for losses that were a foreseeable result of that. For any single purchase, our total liability is limited to **the amount you paid for it**.
-- We're not responsible for indirect or unforeseeable losses, or for problems with your own devices, software or internet connection.
-- **Nothing in these terms limits liability that can't legally be limited**, including for fraud, or for death or personal injury caused by negligence.
-
-## 11. Privacy
-
-How we handle your personal data is explained in our [Privacy Policy](/privacy).
-
-## 12. Changes to these terms
-
-We may update these terms from time to time. The version shown when you buy applies to that purchase. We'll show the date of the latest version at the top of this page.
-
-## 13. Law and disputes
-
-These terms are governed by the laws of England and Wales. If you're a consumer in the UK or EU, you also keep the protection of the mandatory consumer laws of the country where you live, and you can bring a claim in your local courts.
-
-If something goes wrong, please contact us first at **legal@solvscreen.com**. Most issues can be sorted out quickly.
-
----
-
-*© 2026 Sølv. All rights reserved.*
+**Contact.** Questions about these terms or a purchase: legal@solvscreen.com.
