@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import type { Stripe, PaymentRequest } from '@stripe/stripe-js'
@@ -44,6 +45,9 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
   const [phase, setPhase] = useState<Phase>('checking')
   const [purchaseToken, setPurchaseToken] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
+  const [consented, setConsented] = useState(false)
+  const [walletReady, setWalletReady] = useState(false)
+  const walletRequestedRef = useRef(false)
   const stripeRef = useRef<Stripe | null>(null)
   const prRef = useRef<PaymentRequest | null>(null)
   const piIdRef = useRef<string | null>(null)
@@ -66,11 +70,28 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
       const canPay = await pr.canMakePayment()
       if (!canPay) { setPhase('card'); return }
 
-      // Apple Pay or Google Pay is available — pre-create the PaymentIntent
+      prRef.current = pr
+      setPhase('apple-pay')
+    }
+
+    init().catch(() => setPhase('card'))
+  }, [filmId, price, title])
+
+  // The PaymentIntent is created only once consent is ticked (the server
+  // refuses without it), but still before the tap: pr.show() has to run
+  // synchronously inside the click, so the intent must already exist.
+  useEffect(() => {
+    if (phase !== 'apple-pay' || !consented || walletRequestedRef.current) return
+    const stripe = stripeRef.current
+    const pr = prRef.current
+    if (!stripe || !pr) return
+    walletRequestedRef.current = true
+
+    async function prepareWallet(stripe: Stripe, pr: PaymentRequest) {
       const res = await fetch('/api/payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filmId, ...readUtm() }),
+        body: JSON.stringify({ filmId, consent: true, ...readUtm() }),
       })
       if (!res.ok) { setPhase('card'); return }
 
@@ -155,12 +176,11 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
         }
       })
 
-      prRef.current = pr
-      setPhase('apple-pay')
+      setWalletReady(true)
     }
 
-    init().catch(() => setPhase('card'))
-  }, [filmId, price, title])
+    prepareWallet(stripe, pr).catch(() => setPhase('card'))
+  }, [phase, consented, filmId, filmSlug])
 
   async function handleRegularCheckout() {
     track({ event_type: 'buy_button_click', film_id: filmId, film_slug: filmSlug })
@@ -168,7 +188,7 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filmId, ...readUtm() }),
+      body: JSON.stringify({ filmId, consent: true, ...readUtm() }),
     })
     if (!res.ok) { setPhase('error'); setErrorMsg('Checkout failed. Please try again.'); return }
     const { url } = await res.json()
@@ -258,56 +278,87 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
 
   const isProcessing = phase === 'processing'
 
+  const consentBox = (
+    <label
+      className="flex items-start gap-2.5 cursor-pointer select-none text-left"
+      style={{ color: tokens.color.muted2, fontSize: '12px', lineHeight: 1.5 }}
+    >
+      <input
+        type="checkbox"
+        required
+        checked={consented}
+        onChange={(e) => setConsented(e.target.checked)}
+        disabled={isProcessing}
+        className="mt-[2px] shrink-0 w-4 h-4 cursor-pointer"
+        style={{ accentColor: tokens.color.blue }}
+      />
+      <span>
+        I want my download to start immediately, and I understand I lose my 14-day right
+        to cancel once it&apos;s available. I agree to the{' '}
+        <Link href="/terms" target="_blank" className="underline" style={{ color: tokens.color.muted }}>
+          Terms
+        </Link>
+        .
+      </span>
+    </label>
+  )
+
   // ── Apple Pay / Google Pay button ─────────────────────────────────────────
   if (phase === 'apple-pay' || phase === 'checking') {
     return (
-      <button
-        onClick={() => {
-          track({ event_type: 'buy_button_click', film_id: filmId, film_slug: filmSlug })
-          prRef.current?.show()
-        }}
-        onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
-        disabled={isProcessing || phase === 'checking'}
-        className="w-full py-[18px] rounded-2xl font-semibold tracking-wide active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-40"
-        style={{ backgroundColor: tokens.color.bg, border: `1.5px solid ${tokens.color.line2}` }}
-        aria-label={`Buy ${title} with Apple Pay`}
-      >
-        {isProcessing ? (
-          <span className="text-neutral-400 text-sm">Processing…</span>
-        ) : (
-          <>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-            </svg>
-            <span className="text-white text-lg">Pay</span>
-          </>
-        )}
-      </button>
+      <div className="flex flex-col gap-3">
+        {consentBox}
+        <button
+          onClick={() => {
+            track({ event_type: 'buy_button_click', film_id: filmId, film_slug: filmSlug })
+            prRef.current?.show()
+          }}
+          onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
+          disabled={isProcessing || phase === 'checking' || !consented || !walletReady}
+          className="w-full py-[18px] rounded-2xl font-semibold tracking-wide active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-40"
+          style={{ backgroundColor: tokens.color.bg, border: `1.5px solid ${tokens.color.line2}` }}
+          aria-label={`Buy ${title} with Apple Pay`}
+        >
+          {isProcessing ? (
+            <span className="text-neutral-400 text-sm">Processing…</span>
+          ) : (
+            <>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+              </svg>
+              <span className="text-white text-lg">Pay</span>
+            </>
+          )}
+        </button>
+      </div>
     )
   }
 
   // ── Regular checkout fallback ─────────────────────────────────────────────
   return (
-    <button
-      onClick={handleRegularCheckout}
-      onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
-      disabled={isProcessing}
-      className="solv-buy-btn w-full disabled:opacity-60"
-      style={{
-        height: '48px',
-        borderRadius: '13px',
-        border: 'none',
-        backgroundColor: '#0071E3',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
-        color: '#fff',
-        fontWeight: 600,
-        fontSize: '16px',
-        letterSpacing: '-0.01em',
-        cursor: isProcessing ? 'default' : 'pointer',
-      }}
-      aria-label={`Buy ${title} for $${price.toFixed(2)}`}
-    >
-      {isProcessing ? 'Processing…' : `Own it — $${price.toFixed(2)}`}
-    </button>
+    <div className="flex flex-col gap-3">
+      {consentBox}
+      <button
+        onClick={handleRegularCheckout}
+        onMouseEnter={() => track({ event_type: 'buy_button_hover', film_id: filmId, film_slug: filmSlug })}
+        disabled={isProcessing || !consented}
+        className="solv-buy-btn w-full disabled:opacity-40"
+        style={{
+          height: '48px',
+          borderRadius: '13px',
+          border: 'none',
+          backgroundColor: '#0071E3',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+          color: '#fff',
+          fontWeight: 600,
+          fontSize: '16px',
+          letterSpacing: '-0.01em',
+          cursor: isProcessing || !consented ? 'default' : 'pointer',
+        }}
+        aria-label={`Buy ${title} for $${price.toFixed(2)}`}
+      >
+        {isProcessing ? 'Processing…' : `Own it — $${price.toFixed(2)}`}
+      </button>
+    </div>
   )
 }

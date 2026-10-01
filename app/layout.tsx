@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { Bebas_Neue } from 'next/font/google'
 import AddToHomeScreen from '@/components/AddToHomeScreen'
+import { SiteFooter } from '@/components/SiteFooter'
 import './globals.css'
 
 const geistSans = Geist({
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
     : undefined,
   title: 'Sølv',
-  description: 'Own it forever. One tap, $1.99.',
+  description: 'Yours to keep. No expiry. One tap, $1.99.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -36,14 +37,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Sølv',
-    description: 'Own the films that matter. One tap. $1.99. Yours forever.',
+    description: 'Own the films that matter. One tap. $1.99. No expiry.',
     siteName: 'Sølv',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sølv',
-    description: 'Own the films that matter. One tap. $1.99. Yours forever.',
+    description: 'Own the films that matter. One tap. $1.99. No expiry.',
   },
 }
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
+        <SiteFooter />
         <AddToHomeScreen />
       </body>
     </html>

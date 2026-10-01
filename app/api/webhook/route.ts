@@ -16,7 +16,7 @@
  */
 
 import { getStripe } from '@/lib/stripe'
-import { createOrGetPurchase } from '@/lib/purchase'
+import { createOrGetPurchase, consentFromMetadata } from '@/lib/purchase'
 import type Stripe from 'stripe'
 
 export async function POST(request: Request) {
@@ -75,6 +75,7 @@ export async function POST(request: Request) {
       utm_content: session.metadata?.utm_content ?? undefined,
       utm_term: session.metadata?.utm_term ?? undefined,
     },
+    consent: consentFromMetadata(session.metadata),
   })
 
   if (!result) {

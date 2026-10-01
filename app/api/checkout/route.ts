@@ -2,10 +2,15 @@ import { getStripe } from '@/lib/stripe'
 import { serverClient } from '@/lib/supabase'
 
 export async function POST(request: Request) {
-  const { filmId, utm_source, utm_medium, utm_campaign, utm_content, utm_term } = await request.json()
+  const { filmId, consent, utm_source, utm_medium, utm_campaign, utm_content, utm_term } = await request.json()
 
   if (!filmId) {
     return Response.json({ error: 'filmId required' }, { status: 400 })
+  }
+
+  // The UK/EU immediate-supply checkbox is required before any payment.
+  if (consent !== true) {
+    return Response.json({ error: 'consent required' }, { status: 400 })
   }
 
   const { data: film } = await serverClient()
@@ -43,6 +48,8 @@ export async function POST(request: Request) {
     cancel_url: `${origin}/films/${film.id}`,
     metadata: {
       filmId: film.id,
+      consent_immediate_supply: 'true',
+      consent_at: new Date().toISOString(),
       ...(utm_source && { utm_source }),
       ...(utm_medium && { utm_medium }),
       ...(utm_campaign && { utm_campaign }),

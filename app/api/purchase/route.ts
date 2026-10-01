@@ -1,5 +1,5 @@
 import { getStripe } from '@/lib/stripe'
-import { createOrGetPurchase } from '@/lib/purchase'
+import { createOrGetPurchase, consentFromMetadata } from '@/lib/purchase'
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -37,6 +37,7 @@ export async function POST(request: Request) {
     paymentIntentId,
     origin,
     utm,
+    consent: consentFromMetadata(intent.metadata),
   })
 
   if (!result) {

@@ -54,7 +54,7 @@ export function PurchaseConfirmationEmail({ filmTitle, ownerLink, redemptionCode
                     <tr>
                       <td style={{ paddingBottom: '24px' }}>
                         <p style={instruction}>
-                          Your permanent owner link is below. Bookmark it — it never expires.
+                          Your download link (up to 3 downloads).
                         </p>
                       </td>
                     </tr>
@@ -79,7 +79,7 @@ export function PurchaseConfirmationEmail({ filmTitle, ownerLink, redemptionCode
                     {redemptionCode && (
                       <tr>
                         <td style={{ paddingBottom: '16px' }}>
-                          <p style={codeLabel}>Your permanent access code</p>
+                          <p style={codeLabel}>Your access code</p>
                           <p style={codeBlock}>{redemptionCode}</p>
                         </td>
                       </tr>
@@ -89,7 +89,7 @@ export function PurchaseConfirmationEmail({ filmTitle, ownerLink, redemptionCode
                     <tr>
                       <td>
                         <p style={finePrint}>
-                          Your owner link is permanent — bookmark it and come back any time.{redemptionCode ? ' You can also use the code above at solvscreen.com/download as a backup.' : ''}
+                          Your download link (up to 3 downloads) — bookmark it so you can come back to it.{redemptionCode ? ' You can also use the code above at solvscreen.com/download as a backup.' : ''}
                           <br /><br />
                           Questions? Reply to this email and we&apos;ll sort it out.
                         </p>

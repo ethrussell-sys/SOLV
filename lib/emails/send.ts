@@ -23,7 +23,7 @@ export async function sendPurchaseConfirmation({
   })
 
   const redemptionBlock = redemptionCode ? `
-<tr><td style="padding-bottom:16px"><p style="color:#525252;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;margin:0 0 10px">Your permanent access code</p><p style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.12em;font-family:monospace;background-color:#0d0d0d;border:1px solid #222;border-radius:8px;padding:14px 20px;margin:0;display:inline-block">${redemptionCode}</p></td></tr>` : ''
+<tr><td style="padding-bottom:16px"><p style="color:#525252;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;margin:0 0 10px">Your access code</p><p style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.12em;font-family:monospace;background-color:#0d0d0d;border:1px solid #222;border-radius:8px;padding:14px 20px;margin:0;display:inline-block">${redemptionCode}</p></td></tr>` : ''
 
   const { data, error } = await getResend().emails.send({
     from: FROM,
@@ -37,10 +37,10 @@ export async function sendPurchaseConfirmation({
 <tr><td style="padding-bottom:12px"><h1 style="color:#ffffff;font-size:52px;font-weight:900;margin:0;line-height:1;letter-spacing:-1.5px">You own it.</h1></td></tr>
 <tr><td style="padding-bottom:40px"><p style="color:#a3a3a3;font-size:18px;margin:0;line-height:1.5">${filmTitle}</p></td></tr>
 <tr><td style="padding-bottom:40px"><hr style="border:none;border-top:1px solid #1c1c1c;margin:0"></td></tr>
-<tr><td style="padding-bottom:24px"><p style="color:#525252;font-size:14px;margin:0;line-height:1.6">Your permanent owner link is below. Bookmark it — it never expires.</p></td></tr>
+<tr><td style="padding-bottom:24px"><p style="color:#525252;font-size:14px;margin:0;line-height:1.6">Your download link (up to 3 downloads).</p></td></tr>
 <tr><td style="padding-bottom:40px"><a href="${ownerLink}" style="background-color:#0A84FF;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;padding:16px 32px;border-radius:12px;display:inline-block;letter-spacing:0.1px">Download ${filmTitle}</a></td></tr>
 <tr><td style="padding-bottom:32px"><hr style="border:none;border-top:1px solid #1c1c1c;margin:0"></td></tr>${redemptionBlock}
-<tr><td><p style="color:#404040;font-size:12px;margin:0;line-height:1.7">Your owner link is permanent — bookmark it and come back any time.${redemptionCode ? ' You can also use the code above at solvscreen.com/download as a backup.' : ''}<br><br>Questions? Reply to this email and we&apos;ll sort it out.</p></td></tr>
+<tr><td><p style="color:#404040;font-size:12px;margin:0;line-height:1.7">Your download link (up to 3 downloads) — bookmark it so you can come back to it.${redemptionCode ? ' You can also use the code above at solvscreen.com/download as a backup.' : ''}<br><br>Questions? Reply to this email and we&apos;ll sort it out.</p></td></tr>
 </tbody></table>
 </td></tr></tbody></table>
 </body></html>`,
