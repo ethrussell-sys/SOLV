@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getStripe } from '@/lib/stripe'
 import { createOrGetPurchase, consentFromMetadata } from '@/lib/purchase'
-import { ID_TO_SLUG } from '@/lib/slug-map'
 import DownloadButton from './DownloadButton'
 import ShareSection from './ShareSection'
 import PurchaseTracker from './PurchaseTracker'
@@ -43,8 +42,7 @@ async function getOrCreatePurchase(sessionId: string, origin: string) {
 
   if (!result) return null
 
-  const slug = ID_TO_SLUG[result.film.id] ?? result.film.id
-  return { film: result.film, email, slug, purchaseToken: result.purchaseToken }
+  return { film: result.film, email, purchaseToken: result.purchaseToken }
 }
 
 export default async function SuccessPage(props: {
@@ -68,11 +66,13 @@ export default async function SuccessPage(props: {
     )
   }
 
-  const { film, email, slug, purchaseToken } = result
+  const { film, email, purchaseToken } = result
+  // /watch only resolves slugs; a film without one falls back to its film page
+  const sharePath = film.slug ? `/watch/${film.slug}` : `/films/${film.id}`
 
   return (
     <>
-    <PurchaseTracker filmId={film.id} filmSlug={slug} />
+    <PurchaseTracker filmId={film.id} filmSlug={film.slug ?? film.id} />
     <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '64px', paddingBottom: '80px' }}>
 
       <div style={{ width: '100%', maxWidth: '384px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px', textAlign: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
@@ -114,7 +114,7 @@ export default async function SuccessPage(props: {
           {' '}— or find it anytime in your confirmation email.
         </p>
 
-        <ShareSection watchUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/watch/${slug}`} />
+        <ShareSection watchUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}${sharePath}`} />
 
         <Link
           href="/"
