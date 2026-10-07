@@ -52,7 +52,7 @@ export function FilmSubmissionEmail({ filmTitle, directorName }: Props) {
                     <tr>
                       <td style={{ paddingBottom: '40px' }}>
                         <p style={body2}>
-                          Our team reviews every submission personally. If your film is a fit for Sølv, we&apos;ll be in touch within 24 hours to discuss next steps.
+                          Our team reviews every submission personally. If your film is a fit for Sølv, we&apos;ll be in touch within a few days to discuss next steps.
                         </p>
                       </td>
                     </tr>

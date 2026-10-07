@@ -48,7 +48,7 @@ export default function SubmitSuccessPage() {
           lineHeight: 1.6,
           margin: 0,
         }}>
-          We&apos;ll be in touch within 24 hours.<br />Check your email for a confirmation.
+          We&apos;ll be in touch within a few days.<br />Check your email for a confirmation.
         </p>
 
         <Link href="/" style={{

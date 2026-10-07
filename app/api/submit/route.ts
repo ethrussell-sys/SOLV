@@ -74,7 +74,7 @@ export async function POST(request: Request) {
 <tr><td style="padding-bottom:12px"><h1 style="color:#fff;font-size:48px;font-weight:900;margin:0;line-height:1;letter-spacing:-1.5px">We have your film.</h1></td></tr>
 <tr><td style="padding-bottom:40px"><p style="color:#a3a3a3;font-size:18px;margin:0;line-height:1.5">${byline} submission of <em style="color:#fff">${title}</em> has been received.</p></td></tr>
 <tr><td style="padding-bottom:40px"><hr style="border:none;border-top:1px solid #1c1c1c;margin:0"></td></tr>
-<tr><td style="padding-bottom:40px"><p style="color:#525252;font-size:14px;margin:0;line-height:1.7">Our team reviews every submission personally. If your film is a fit for Sølv, we'll be in touch within 24 hours to discuss next steps.</p></td></tr>
+<tr><td style="padding-bottom:40px"><p style="color:#525252;font-size:14px;margin:0;line-height:1.7">Our team reviews every submission personally. If your film is a fit for Sølv, we'll be in touch within a few days to discuss next steps.</p></td></tr>
 <tr><td style="padding-bottom:40px"><hr style="border:none;border-top:1px solid #1c1c1c;margin:0"></td></tr>
 <tr><td><p style="color:#404040;font-size:12px;margin:0;line-height:1.7">Questions? Reply to this email.</p></td></tr>
 </tbody></table>

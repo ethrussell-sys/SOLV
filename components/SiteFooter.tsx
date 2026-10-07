@@ -24,6 +24,7 @@ export function SiteFooter() {
         gap: '24px',
       }}
     >
+      <Link href="/submit" style={link}>Submit a film</Link>
       <Link href="/terms" style={link}>Terms</Link>
       <Link href="/privacy" style={link}>Privacy</Link>
     </footer>

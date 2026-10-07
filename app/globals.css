@@ -139,3 +139,43 @@ body:has([data-fixed-buybar]) .site-footer {
 .solv-share-icon-btn:active {
   transform: scale(0.92);
 }
+
+/* Homepage — filmmaker entry point (typography mirrors the hero, inline) */
+.filmmaker-cta {
+  padding: 96px 0;
+}
+.filmmaker-cta-inner {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease-out, transform 600ms ease-out;
+}
+.filmmaker-cta-inner.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (min-width: 768px) {
+  .filmmaker-cta { padding: 160px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filmmaker-cta-inner {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Homepage — breathing room under the wordmark */
+.hero-section > img {
+  margin-bottom: 32px;
+}
+@media (min-width: 768px) {
+  .hero-section > img { margin-bottom: 48px; }
+}
+
+/* Homepage — site footer links share the hero's left edge
+   (!important: SiteFooter sets these inline) */
+body:has(.home-main) .site-footer {
+  justify-content: flex-start !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}

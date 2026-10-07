@@ -168,7 +168,7 @@ export default function SubmitPage() {
             Submit your film.
           </h1>
           <p className="text-neutral-500 text-sm leading-relaxed">
-            We review every submission personally. If it&apos;s a fit, we&apos;ll be in touch within 24 hours.
+            We review every submission personally. If it&apos;s a fit, we&apos;ll be in touch within a few days.
           </p>
         </div>
 
