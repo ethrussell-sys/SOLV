@@ -85,7 +85,7 @@ export default function AddToHomeScreen() {
           <button
             onClick={installAndroid}
             className="text-xs font-semibold self-start px-3 py-1.5 rounded-lg mt-0.5"
-            style={{ backgroundColor: tokens.color.blue, color: tokens.color.ink }}
+            style={{ backgroundColor: tokens.color.white, color: tokens.color.bg }}
           >
             Add to Home Screen
           </button>

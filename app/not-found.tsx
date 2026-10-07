@@ -12,14 +12,6 @@ export default function NotFound() {
       display: 'flex',
       flexDirection: 'column',
     }}>
-      <Link href="/" aria-label="Go to homepage" style={{ alignSelf: 'flex-start' }}>
-        <img
-          src="/solv-wordmark_2.png"
-          alt="solv"
-          style={{ height: '28px', width: 'auto', display: 'block' }}
-        />
-      </Link>
-
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '48px' }}>
         <p style={{
           color: tokens.color.muted2,

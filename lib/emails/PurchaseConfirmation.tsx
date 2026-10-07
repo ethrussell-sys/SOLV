@@ -15,7 +15,7 @@ export function PurchaseConfirmationEmail({ filmTitle, ownerLink, redemptionCode
         <title>You own {filmTitle}</title>
       </head>
       <body style={body}>
-        <table width="100%" cellPadding={0} cellSpacing={0} style={outer}>
+        <table width="100%" cellPadding={0} cellSpacing={0} bgcolor="#000000" style={outer}>
           <tbody>
             <tr>
               <td align="center" style={{ padding: '48px 24px' }}>
@@ -25,7 +25,8 @@ export function PurchaseConfirmationEmail({ filmTitle, ownerLink, redemptionCode
                     {/* Wordmark */}
                     <tr>
                       <td style={{ paddingBottom: '48px' }}>
-                        <span style={wordmark}>S&Oslash;LV</span>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="https://solvscreen.com/solv-wordmark-email.png" width={47} height={24} alt="sølv" style={wordmark} />
                       </td>
                     </tr>
 
@@ -128,11 +129,9 @@ const card: React.CSSProperties = {
 }
 
 const wordmark: React.CSSProperties = {
-  color: '#0A84FF',
-  fontSize: '13px',
-  fontWeight: 700,
-  letterSpacing: '0.25em',
-  textTransform: 'uppercase',
+  display: 'block', border: 0, height: '24px', width: '47px', backgroundColor: '#000000',
+  // shown in place of the logo when images are blocked
+  color: '#ffffff', fontFamily: "Georgia, 'Times New Roman', serif", fontSize: '20px', lineHeight: '24px',
 }
 
 const headline: React.CSSProperties = {
@@ -165,8 +164,8 @@ const instruction: React.CSSProperties = {
 }
 
 const button: React.CSSProperties = {
-  backgroundColor: '#0A84FF',
-  color: '#ffffff',
+  backgroundColor: '#ffffff',
+  color: '#000000',
   fontSize: '16px',
   fontWeight: 600,
   textDecoration: 'none',

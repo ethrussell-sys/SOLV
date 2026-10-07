@@ -1,10 +1,14 @@
 import { ImageResponse } from 'next/og'
+import { join } from 'node:path'
+import { readFile } from 'node:fs/promises'
 import { tokens } from '@/lib/tokens'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const wordmark = await readFile(join(process.cwd(), 'public/solv-wordmark_2.png'), 'base64')
+
   return new ImageResponse(
     (
       <div
@@ -18,18 +22,7 @@ export default function OpengraphImage() {
           justifyContent: 'center',
         }}
       >
-        <div
-          style={{
-            color: tokens.color.ink,
-            fontSize: 160,
-            fontWeight: 900,
-            fontFamily: 'sans-serif',
-            letterSpacing: '0.05em',
-            lineHeight: 1,
-          }}
-        >
-          SØLV
-        </div>
+        <img src={`data:image/png;base64,${wordmark}`} alt="sølv" width={394} height={200} />
         <div
           style={{
             marginTop: 28,

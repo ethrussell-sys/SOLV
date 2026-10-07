@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import RedeemForm from './RedeemForm'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 export default function DownloadPage() {
@@ -22,11 +21,6 @@ export default function DownloadPage() {
         flexDirection: 'column',
         gap: '40px',
       }}>
-
-        {/* Wordmark */}
-        <div style={{ textAlign: 'center' }}>
-          <Wordmark size={12} tracking="0.3em" color={tokens.color.muted2} fontFamily={tokens.font.body} />
-        </div>
 
         {/* Heading */}
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>

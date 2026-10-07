@@ -38,13 +38,7 @@ export default function AgeGate({ slug }: { slug: string }) {
     }}>
 
       {/* Wordmark */}
-      <Wordmark
-        size={12}
-        tracking="0.3em"
-        color={tokens.color.muted2}
-        fontFamily={tokens.font.body}
-        style={{ position: 'absolute', top: '40px' }}
-      />
+      <Wordmark height={22} style={{ position: 'absolute', top: '40px' }} />
 
       <div style={{
         width: '100%',
@@ -71,8 +65,8 @@ export default function AgeGate({ slug }: { slug: string }) {
             padding: '18px',
             borderRadius: '14px',
             border: 'none',
-            backgroundColor: tokens.color.blue,
-            color: tokens.color.ink,
+            backgroundColor: tokens.color.white,
+            color: tokens.color.bg,
             fontSize: '16px',
             fontWeight: 600,
             letterSpacing: '0.02em',

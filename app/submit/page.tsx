@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useState, ChangeEvent, FormEvent } from 'react'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 type Phase = 'form' | 'uploading' | 'saving' | 'error'
@@ -127,7 +126,7 @@ export default function SubmitPage() {
       <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 gap-8">
         <p
           className="text-4xl uppercase tracking-tight"
-          style={{ fontFamily: tokens.font.display, color: phase === 'saving' ? tokens.color.blue : tokens.color.ink }}
+          style={{ fontFamily: tokens.font.display, color: tokens.color.ink }}
         >
           {phase === 'saving' ? 'Saving…' : 'Uploading…'}
         </p>
@@ -137,7 +136,7 @@ export default function SubmitPage() {
             <div className="w-full h-px bg-neutral-900 relative overflow-hidden rounded-full">
               <div
                 className="absolute left-0 top-0 h-full transition-all duration-150"
-                style={{ width: `${progress}%`, backgroundColor: tokens.color.blue }}
+                style={{ width: `${progress}%`, backgroundColor: tokens.color.white }}
               />
             </div>
             <span className="text-neutral-600 text-xs text-right tabular-nums">{progress}%</span>
@@ -150,29 +149,44 @@ export default function SubmitPage() {
   // ── Form ─────────────────────────────────────────────────────────────────
   return (
     <main className="min-h-screen bg-black text-white">
-      <div className="max-w-lg mx-auto px-6 py-16">
+      <div className="page-gutter" style={{ paddingBottom: '96px' }}>
 
-        {/* Header */}
-        <div className="flex flex-col gap-6 mb-16">
-          <Wordmark
-            size={12}
-            tracking="0.25em"
-            color={tokens.color.blue}
-            fontFamily={tokens.font.body}
-            style={{ fontWeight: 700 }}
-          />
-          <h1
-            className="text-6xl uppercase leading-none tracking-tight"
-            style={{ fontFamily: tokens.font.display }}
-          >
-            Submit your film.
+        {/* Header — same type system as the homepage hero */}
+        <div style={{ marginBottom: '96px' }}>
+          <p style={{
+            color: tokens.color.muted2,
+            fontSize: '11px',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            margin: '0 0 16px',
+          }}>
+            For filmmakers
+          </p>
+          <h1 style={{
+            fontFamily: tokens.font.display,
+            fontSize: 'clamp(3rem, 11vw, 6.5rem)',
+            fontWeight: 400,
+            lineHeight: 0.95,
+            textTransform: 'uppercase',
+            letterSpacing: '-0.5px',
+            margin: '0 0 24px',
+          }}>
+            Your film.<br />Your audience.
           </h1>
-          <p className="text-neutral-500 text-sm leading-relaxed">
+          <p style={{
+            color: tokens.color.muted2,
+            fontSize: '15px',
+            lineHeight: 1.6,
+            margin: '0 0 12px',
+          }}>
+            Straight to the people who want it.
+          </p>
+          <p className="text-neutral-500 text-sm leading-relaxed" style={{ margin: 0 }}>
             We review every submission personally. If it&apos;s a fit, we&apos;ll be in touch within a few days.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-10" style={{ maxWidth: '512px' }}>
 
           {/* Title */}
           <div>
@@ -201,7 +215,7 @@ export default function SubmitPage() {
 
           {/* Description */}
           <div>
-            <label style={labelStyle}>Short description (max {DESC_MAX} characters)</label>
+            <label style={labelStyle}>Short description</label>
             <textarea
               name="description"
               maxLength={DESC_MAX}
@@ -215,7 +229,7 @@ export default function SubmitPage() {
               }}
               placeholder="—"
             />
-            <div className="text-right" style={{ color: descLen > DESC_MAX - 20 ? tokens.color.blue : tokens.color.muted2, fontSize: '11px', marginTop: '4px' }}>
+            <div className="text-right" style={{ color: descLen > DESC_MAX - 20 ? tokens.color.ink : tokens.color.muted2, fontSize: '11px', marginTop: '4px' }}>
               {descLen}/{DESC_MAX}
             </div>
           </div>
@@ -255,9 +269,9 @@ export default function SubmitPage() {
                   style={{
                     padding: '7px 16px',
                     borderRadius: '6px',
-                    border: `1px solid ${rating === r ? tokens.color.blue : tokens.color.line2}`,
-                    backgroundColor: rating === r ? tokens.color.blue : 'transparent',
-                    color: rating === r ? tokens.color.ink : tokens.color.muted2,
+                    border: `1px solid ${rating === r ? tokens.color.white : tokens.color.line2}`,
+                    backgroundColor: rating === r ? tokens.color.white : 'transparent',
+                    color: rating === r ? tokens.color.bg : tokens.color.muted2,
                     fontSize: '13px',
                     fontWeight: 600,
                     letterSpacing: '0.04em',
@@ -305,24 +319,21 @@ export default function SubmitPage() {
             <p style={{ color: '#ef4444', fontSize: '14px', margin: 0 }}>{error}</p>
           )}
 
-          {/* Divider */}
-          <div style={{ borderTop: `1px solid ${tokens.color.line}` }} />
-
           {/* Licensing declaration */}
-          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+          <label className="consent-check">
             <input
               type="checkbox"
+              className="consent-check-input"
               checked={licensed}
               onChange={(e) => setLicensed(e.target.checked)}
-              style={{
-                marginTop: '2px',
-                width: '16px',
-                height: '16px',
-                flexShrink: 0,
-                accentColor: tokens.color.blue,
-                cursor: 'pointer',
-              }}
             />
+            <span className="consent-check-hit" aria-hidden="true">
+              <span className="consent-check-box">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+            </span>
             <span style={{ color: licensed ? tokens.color.muted : tokens.color.muted2, fontSize: '13px', lineHeight: 1.6, transition: 'color 0.15s' }}>
               I confirm the content rating above is accurate and that all music and other third-party content in this film is licensed for commercial digital distribution.
             </span>
@@ -331,8 +342,8 @@ export default function SubmitPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-4 rounded-2xl text-white font-semibold text-base tracking-wide active:scale-95 transition-transform"
-            style={{ backgroundColor: tokens.color.blue }}
+            className="w-full py-4 rounded-2xl text-black font-semibold text-base tracking-wide active:scale-95 transition-transform"
+            style={{ backgroundColor: tokens.color.white }}
           >
             Submit film
           </button>

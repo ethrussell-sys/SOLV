@@ -71,13 +71,21 @@ body {
   }
 }
 
-/* Homepage hero */
+/* Homepage hero — top padding is the breathing room under the site header */
 .hero-section {
   min-height: 100vh;
+  padding-top: 32px;
+}
+@media (min-width: 768px) {
+  .hero-section { padding-top: 48px; }
 }
 @media (min-width: 1024px) {
   .hero-section {
     min-height: 60vh;
+  }
+  /* on mobile the hero's centring already leaves room above the divider */
+  .hero-divider {
+    margin-top: 48px;
   }
 }
 
@@ -109,14 +117,6 @@ body {
 .explore-link:hover {
   opacity: 1;
 }
-/* Wordmark logo (top-left) */
-.hero-section > img {
-  height: 28px;
-  width: auto;
-  display: block;
-  align-self: flex-start;
-}
-
 /* Watch page — pinned buy button */
 .solv-buy-btn {
   transition: transform 0.12s ease, filter 0.12s ease;
@@ -124,6 +124,43 @@ body {
 .solv-buy-btn:active:not(:disabled) {
   transform: scale(0.97);
   filter: brightness(0.92);
+}
+
+/* Site footer */
+.site-footer {
+  background: #000000;
+  padding: 0 48px calc(32px + env(safe-area-inset-bottom));
+}
+.site-footer-inner {
+  border-top: 1px solid #111116;
+  padding-top: 48px;
+}
+.site-footer-tagline {
+  color: #6a6a73;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 12px 0 0;
+}
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin-top: 40px;
+}
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #6a6a73;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.site-footer-links a:hover {
+  color: #f4f4f6;
 }
 
 /* Site footer — keep Terms/Privacy clear of a fixed bottom buy bar
@@ -140,42 +177,105 @@ body:has([data-fixed-buybar]) .site-footer {
   transform: scale(0.92);
 }
 
-/* Homepage — filmmaker entry point (typography mirrors the hero, inline) */
-.filmmaker-cta {
-  padding: 96px 0;
+
+/* Site header — wordmark home (left), FILMMAKERS (right) */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: calc(24px + env(safe-area-inset-top)) 48px 0;
+  background: #000000;
 }
-.filmmaker-cta-inner {
+.site-header-home,
+.site-header-link {
+  display: inline-flex;
+  align-items: flex-end;
+  min-height: 44px;
+  min-width: 44px;
+}
+.site-header-link {
+  justify-content: flex-end;
+  /* optically centres the caps on the serif wordmark: between its
+     x-height middle and its full-height middle */
+  padding-bottom: 6px;
+  color: #6a6a73;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.site-header-link:hover {
+  color: #f4f4f6;
+}
+.site-header-link.is-current {
+  color: #c9ccd4;
+}
+
+/* Page body on the site header's 48px gutter, with the same space under
+   the header as the homepage hero's headline. Until 1024px the hero fills
+   the screen and centres its headline, which lands ~130px below the
+   header on a phone. */
+.page-gutter {
+  padding: 130px 48px 0;
+}
+@media (min-width: 1024px) {
+  .page-gutter { padding-top: 48px; }
+}
+.page-top-space {
+  height: 32px;
+}
+@media (min-width: 768px) {
+  .page-top-space { height: 48px; }
+}
+
+/* Submit page — licensing checkbox: thin grey outline, white fill with a
+   black tick when checked. The 44px hit area is pulled back with negative
+   margins so the 18px box sits on the text's left edge and first line. */
+.consent-check {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  cursor: pointer;
+}
+.consent-check-input {
+  position: absolute;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 600ms ease-out, transform 600ms ease-out;
+  width: 1px;
+  height: 1px;
+  margin: 0;
 }
-.filmmaker-cta-inner.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.consent-check-hit {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: -12px 0 -12px -13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-@media (min-width: 768px) {
-  .filmmaker-cta { padding: 160px 0; }
+.consent-check-box {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #6a6a73;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
 }
-@media (prefers-reduced-motion: reduce) {
-  .filmmaker-cta-inner {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
+.consent-check:hover .consent-check-box {
+  border-color: #8c8c96;
 }
-
-/* Homepage — breathing room under the wordmark */
-.hero-section > img {
-  margin-bottom: 32px;
+.consent-check-input:checked + .consent-check-hit .consent-check-box {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
 }
-@media (min-width: 768px) {
-  .hero-section > img { margin-bottom: 48px; }
-}
-
-/* Homepage — site footer links share the hero's left edge
-   (!important: SiteFooter sets these inline) */
-body:has(.home-main) .site-footer {
-  justify-content: flex-start !important;
-  padding-left: 48px !important;
-  padding-right: 48px !important;
+.consent-check-input:focus-visible + .consent-check-hit .consent-check-box {
+  outline: 2px solid #f4f4f6;
+  outline-offset: 2px;
 }

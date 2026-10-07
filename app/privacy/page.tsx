@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { Wordmark } from '@/components/Wordmark'
 import { Markdown } from '@/lib/markdown'
 import { tokens } from '@/lib/tokens'
 
@@ -18,13 +17,6 @@ export default function PrivacyPage() {
   return (
     <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, minHeight: '100vh' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto', padding: '64px 24px 96px' }}>
-
-        {/* Wordmark */}
-        <div style={{ marginBottom: '56px' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <Wordmark size={12} tracking="0.25em" color={tokens.color.muted2} fontFamily={tokens.font.body} />
-          </Link>
-        </div>
 
         <Markdown source={PRIVACY} />
 

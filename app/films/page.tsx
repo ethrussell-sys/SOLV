@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { serverClient } from '@/lib/supabase'
 import { FilmCard } from '@/components/FilmCard'
 import { tokens } from '@/lib/tokens'
@@ -20,18 +19,7 @@ export default async function FilmsPage() {
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: tokens.color.bg, color: tokens.color.ink, paddingLeft: '48px', paddingRight: '48px' }}>
-      <div style={{ padding: '40px 0 24px' }}>
-        <Link
-          href="/"
-          style={{ height: '28px', width: 'auto', display: 'inline-block' }}
-        >
-          <img
-            src="/solv-wordmark_2.png"
-            alt="solv"
-            style={{ height: '28px', width: 'auto', display: 'block' }}
-          />
-        </Link>
-      </div>
+      <div className="page-top-space" />
 
       <h1
         style={{

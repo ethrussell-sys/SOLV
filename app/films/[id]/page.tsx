@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { serverClient } from '@/lib/supabase'
 import BuyButton from './BuyButton'
-import BackButton from './BackButton'
 import ShareButton from '@/app/watch/[slug]/ShareButton'
 import { tokens } from '@/lib/tokens'
 
@@ -78,7 +77,7 @@ export default async function FilmPage(props: {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: tokens.color.bg, color: tokens.color.ink, display: 'flex', flexDirection: 'column', paddingBottom: '40px' }}>
 
-      <BackButton />
+      <div className="page-top-space" />
 
       {/* ── Hero ── */}
       <div className="film-hero" style={{ position: 'relative', width: '100%', backgroundColor: tokens.color.surface, flexShrink: 0 }}>
@@ -111,17 +110,24 @@ export default async function FilmPage(props: {
           }}>
             {film.title}
           </h1>
-          {(film.director || film.year || film.price) && (
-            <p style={{
-              color: tokens.color.muted,
-              fontSize: '11px',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              margin: '8px 0 0',
-            }}>
-              {[film.director, film.year, film.price != null ? `$${Number(film.price).toFixed(2)}` : null].filter(Boolean).join('   ·   ')}
-            </p>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+            {(film.director || film.year || film.price) && (
+              <p style={{
+                color: tokens.color.muted,
+                fontSize: '11px',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                margin: 0,
+              }}>
+                {[film.director, film.year, film.price != null ? `$${Number(film.price).toFixed(2)}` : null].filter(Boolean).join('   ·   ')}
+              </p>
+            )}
+            <ShareButton
+              filmId={film.id}
+              filmSlug={slug ?? undefined}
+              sharePath={slug ? `/watch/${slug}` : undefined}
+            />
+          </div>
         </div>
       </div>
 
@@ -171,14 +177,6 @@ export default async function FilmPage(props: {
             </div>
           </div>
         )}
-
-        <div style={{ paddingLeft: '32px', paddingRight: '32px' }}>
-          <ShareButton
-            filmId={film.id}
-            filmSlug={slug ?? undefined}
-            sharePath={slug ? `/watch/${slug}` : undefined}
-          />
-        </div>
 
       </div>
 

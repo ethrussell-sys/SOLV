@@ -5,7 +5,6 @@ import { createOrGetPurchase, consentFromMetadata } from '@/lib/purchase'
 import DownloadButton from './DownloadButton'
 import ShareSection from './ShareSection'
 import PurchaseTracker from './PurchaseTracker'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 async function getOrCreatePurchase(sessionId: string, origin: string) {
@@ -76,10 +75,9 @@ export default async function SuccessPage(props: {
     <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '64px', paddingBottom: '80px' }}>
 
       <div style={{ width: '100%', maxWidth: '384px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px', textAlign: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
-        <Wordmark size={12} tracking="0.3em" color={tokens.color.muted2} fontFamily={tokens.font.body} />
 
-        <div style={{ width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.blue }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.white }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
@@ -108,7 +106,7 @@ export default async function SuccessPage(props: {
 
         <p style={{ color: tokens.color.muted2, fontSize: '12px', margin: 0 }}>
           Download didn&apos;t start?{' '}
-          <a href={`/api/download?token=${purchaseToken}`} style={{ color: tokens.color.blue, textDecoration: 'underline' }}>
+          <a href={`/api/download?token=${purchaseToken}`} style={{ color: tokens.color.ink, textDecoration: 'underline' }}>
             Tap to retry
           </a>
           {' '}— or find it anytime in your confirmation email.

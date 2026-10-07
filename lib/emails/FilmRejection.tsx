@@ -10,7 +10,7 @@ export function FilmRejectionEmail({ filmTitle, directorName }: Props) {
         <title>Regarding {filmTitle}</title>
       </head>
       <body style={body}>
-        <table width="100%" cellPadding={0} cellSpacing={0} style={outer}>
+        <table width="100%" cellPadding={0} cellSpacing={0} bgcolor="#000000" style={outer}>
           <tbody>
             <tr>
               <td align="center" style={{ padding: '48px 24px' }}>
@@ -19,7 +19,8 @@ export function FilmRejectionEmail({ filmTitle, directorName }: Props) {
 
                     <tr>
                       <td style={{ paddingBottom: '48px' }}>
-                        <span style={wordmark}>S&Oslash;LV</span>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="https://solvscreen.com/solv-wordmark-email.png" width={47} height={24} alt="sølv" style={wordmark} />
                       </td>
                     </tr>
 
@@ -86,7 +87,11 @@ const body: React.CSSProperties = {
 }
 const outer: React.CSSProperties = { backgroundColor: '#000000', width: '100%' }
 const card: React.CSSProperties = { maxWidth: '480px', width: '100%' }
-const wordmark: React.CSSProperties = { color: '#0A84FF', fontSize: '13px', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase' }
+const wordmark: React.CSSProperties = {
+  display: 'block', border: 0, height: '24px', width: '47px', backgroundColor: '#000000',
+  // shown in place of the logo when images are blocked
+  color: '#ffffff', fontFamily: "Georgia, 'Times New Roman', serif", fontSize: '20px', lineHeight: '24px',
+}
 const headline: React.CSSProperties = { color: '#ffffff', fontSize: '42px', fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: '-1px' }
 const sub: React.CSSProperties = { color: '#a3a3a3', fontSize: '17px', margin: 0, lineHeight: 1.5 }
 const copy: React.CSSProperties = { color: '#525252', fontSize: '14px', margin: 0, lineHeight: 1.7 }

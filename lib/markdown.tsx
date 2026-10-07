@@ -39,7 +39,7 @@ export const mdStyles = {
     margin: 0,
   },
   strong: { color: tokens.color.muted, fontWeight: 500 },
-  link: { color: tokens.color.blue, textDecoration: 'none' },
+  link: { color: tokens.color.ink, textDecoration: 'underline' },
   list: { paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' },
   divider: { border: 'none', borderTop: `1px solid ${tokens.color.line}`, margin: '16px 0' },
 } satisfies Record<string, CSSProperties>

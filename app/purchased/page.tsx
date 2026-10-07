@@ -2,7 +2,6 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { serverClient } from '@/lib/supabase'
 import { verifyMagicSession, MAGIC_SESSION_COOKIE } from '@/lib/magic-link'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 import MagicLinkForm from './MagicLinkForm'
 
@@ -65,10 +64,6 @@ export default async function PurchasedPage(props: {
     }}>
       <div style={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
-        <div style={{ textAlign: 'center' }}>
-          <Wordmark size={12} tracking="0.3em" color={tokens.color.muted2} fontFamily={tokens.font.body} />
-        </div>
-
         {!session ? (
           <>
             <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -121,8 +116,8 @@ export default async function PurchasedPage(props: {
                             textAlign: 'center',
                             padding: '14px',
                             borderRadius: '12px',
-                            backgroundColor: tokens.color.blue,
-                            color: tokens.color.ink,
+                            backgroundColor: tokens.color.white,
+                            color: tokens.color.bg,
                             fontSize: '14px',
                             fontWeight: 600,
                             textDecoration: 'none',
