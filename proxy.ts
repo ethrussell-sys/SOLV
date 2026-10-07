@@ -13,16 +13,24 @@ export async function proxy(request: NextRequest) {
   const id = request.nextUrl.pathname.split('/')[2] ?? ''
   if (!UUID.test(id)) return NextResponse.next()
 
-  const { data: film } = await serverClient()
-    .from('films')
-    .select('slug')
-    .eq('id', id)
-    .maybeSingle()
+  // A failed lookup must never take the request down: fall through to
+  // the page, which shows the 404.
+  let slug: string | null = null
+  try {
+    const { data: film } = await serverClient()
+      .from('films')
+      .select('slug')
+      .eq('id', id)
+      .maybeSingle()
+    slug = film?.slug ?? null
+  } catch (err) {
+    console.error('[proxy] film lookup failed:', err)
+  }
 
-  if (!film?.slug) return NextResponse.next()
+  if (!slug) return NextResponse.next()
 
   const url = request.nextUrl.clone()
-  url.pathname = `/watch/${film.slug}`
+  url.pathname = `/watch/${slug}`
   return NextResponse.redirect(url, 308)
 }
 
