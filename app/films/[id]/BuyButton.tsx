@@ -206,14 +206,14 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
         <div className="flex flex-col items-center gap-8">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center animate-pop-in"
-            style={{ backgroundColor: tokens.color.blue }}
+            style={{ backgroundColor: tokens.color.white }}
           >
             <svg
               width="36"
               height="36"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="white"
+              stroke="black"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -236,8 +236,8 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
             <>
               <button
                 onClick={() => triggerDownload(downloadUrlFor(purchaseToken))}
-                className="w-full max-w-xs py-4 rounded-2xl text-white font-semibold text-base tracking-wide active:scale-95 transition-transform"
-                style={{ backgroundColor: tokens.color.blue }}
+                className="w-full max-w-xs py-4 rounded-2xl text-black font-semibold text-base tracking-wide active:scale-95 transition-transform"
+                style={{ backgroundColor: tokens.color.white }}
               >
                 Download to device
               </button>
@@ -246,7 +246,7 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
                 Download didn&apos;t start?{' '}
                 <a
                   href={downloadUrlFor(purchaseToken)}
-                  style={{ color: tokens.color.blue }}
+                  style={{ color: tokens.color.ink }}
                   className="underline"
                 >
                   Tap to retry
@@ -267,8 +267,8 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
         <p className="text-red-400 text-sm text-center">{errorMsg}</p>
         <button
           onClick={() => setPhase('card')}
-          className="w-full py-4 rounded-2xl text-white text-lg font-semibold"
-          style={{ backgroundColor: tokens.color.blue }}
+          className="w-full py-4 rounded-2xl text-black text-lg font-semibold"
+          style={{ backgroundColor: tokens.color.white }}
         >
           Try again
         </button>
@@ -327,9 +327,9 @@ export default function BuyButton({ filmId, price, title, filmSlug }: Props) {
           height: '48px',
           borderRadius: '13px',
           border: 'none',
-          backgroundColor: '#0071E3',
+          backgroundColor: tokens.color.white,
           boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
-          color: '#fff',
+          color: tokens.color.bg,
           fontWeight: 600,
           fontSize: '16px',
           letterSpacing: '-0.01em',

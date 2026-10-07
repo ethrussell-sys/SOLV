@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import { serverClient } from '@/lib/supabase'
@@ -10,7 +9,6 @@ import ShareButton from './ShareButton'
 import TrailerPlayer from './TrailerPlayer'
 import TeaserPlayer from './TeaserPlayer'
 import PageTracker from './PageTracker'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 export async function generateMetadata(
@@ -111,35 +109,6 @@ export default async function WatchPage(props: {
       alignItems: 'center',
     }}>
 
-      <Link
-        href="/"
-        aria-label="Go to homepage"
-        style={{
-          position: 'fixed',
-          top: 'calc(16px + env(safe-area-inset-top))',
-          left: '16px',
-          zIndex: 50,
-          width: '36px',
-          height: '36px',
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '0.5px solid rgba(255,255,255,0.12)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: tokens.color.ink,
-          textDecoration: 'none',
-          transform: 'translateZ(0)',
-          WebkitTransform: 'translateZ(0)',
-        }}
-      >
-        <img src="/solv-mark.png" alt="" width={20} height={20} style={{ display: 'block' }} />
-      </Link>
-
-      <ShareButton filmId={film.id} filmSlug={slug} />
-
       <div style={{
         width: '100%',
         maxWidth: '480px',
@@ -150,8 +119,6 @@ export default async function WatchPage(props: {
         padding: '48px 24px 40px',
         gap: '20px',
       }}>
-
-        <Wordmark />
 
         {/* Title */}
         <h1 style={{
@@ -166,19 +133,22 @@ export default async function WatchPage(props: {
           {film.title}
         </h1>
 
-        {/* Metadata */}
-        {meta && (
-          <p style={{
-            color: tokens.color.muted2,
-            fontSize: '11px',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            margin: 0,
-            textAlign: 'center',
-          }}>
-            {meta}
-          </p>
-        )}
+        {/* Metadata + share */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+          {meta && (
+            <p style={{
+              color: tokens.color.muted2,
+              fontSize: '11px',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              margin: 0,
+              textAlign: 'center',
+            }}>
+              {meta}
+            </p>
+          )}
+          <ShareButton filmId={film.id} filmSlug={slug} />
+        </div>
 
         {/* Trailer */}
         {embedUrl && (
@@ -272,16 +242,6 @@ export default async function WatchPage(props: {
 
       </div>
 
-      <p style={{
-        color: tokens.color.muted2,
-        fontSize: '11px',
-        letterSpacing: '0.05em',
-        textAlign: 'center',
-        padding: '0 24px 32px',
-        margin: 0,
-      }}>
-        © 2026 SØLV
-      </p>
 
     </main>
     </>

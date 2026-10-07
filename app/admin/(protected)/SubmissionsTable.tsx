@@ -115,8 +115,8 @@ export default function SubmissionsTable({ films }: { films: Film[] }) {
                       onClick={() => approve(film)}
                       disabled={!!state}
                       style={{
-                        backgroundColor: tokens.color.blue,
-                        color: tokens.color.ink,
+                        backgroundColor: tokens.color.white,
+                        color: tokens.color.bg,
                         border: 'none',
                         borderRadius: '8px',
                         padding: '6px 14px',

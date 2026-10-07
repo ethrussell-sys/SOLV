@@ -20,13 +20,13 @@ export default function SubmitSuccessPage() {
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          backgroundColor: tokens.color.blue,
+          backgroundColor: tokens.color.white,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
         }}>
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
@@ -59,7 +59,7 @@ export default function SubmitSuccessPage() {
           textDecoration: 'none',
           marginTop: '16px',
         }}>
-          Back to SØLV
+          Back to films
         </Link>
 
       </div>

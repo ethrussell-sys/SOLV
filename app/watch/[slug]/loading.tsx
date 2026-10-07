@@ -1,5 +1,4 @@
 import { Skeleton } from '@/components/Skeleton'
-import { Wordmark } from '@/components/Wordmark'
 import { tokens } from '@/lib/tokens'
 
 export default function WatchLoading() {
@@ -25,7 +24,6 @@ export default function WatchLoading() {
           gap: 20,
         }}
       >
-        <Wordmark />
         <Skeleton width={240} height={56} radius={tokens.radius.sm} />
         <Skeleton width={160} height={12} radius={tokens.radius.sm} />
         <Skeleton width="100%" height={0} style={{ paddingTop: '56.25%', borderRadius: tokens.radius.lg }} />

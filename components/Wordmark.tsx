@@ -1,35 +1,20 @@
-import { tokens } from '@/lib/tokens'
-
-type WordmarkProps = {
-  size?: number
-  tracking?: string
-  color?: string
-  fontFamily?: string
-  className?: string
-  style?: React.CSSProperties
-}
-
+// The serif "sølv" mark, the only logo. The PNG is white on transparent.
 export function Wordmark({
-  size = 13,
-  tracking = '0.3em',
-  color = tokens.color.muted2,
-  fontFamily = tokens.font.display,
+  height = 28,
   className,
   style,
-}: WordmarkProps) {
+}: {
+  height?: number
+  className?: string
+  style?: React.CSSProperties
+}) {
   return (
-    <span
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/solv-wordmark_2.png"
+      alt="sølv"
       className={className}
-      style={{
-        fontFamily,
-        fontSize: size,
-        letterSpacing: tracking,
-        textTransform: 'uppercase',
-        color,
-        ...style,
-      }}
-    >
-      SØLV
-    </span>
+      style={{ height, width: 'auto', display: 'block', ...style }}
+    />
   )
 }

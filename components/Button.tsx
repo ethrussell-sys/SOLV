@@ -38,7 +38,7 @@ const base: CSSProperties = {
 }
 
 const variants: Record<Variant, CSSProperties> = {
-  primary: { backgroundColor: tokens.color.blue, color: tokens.color.ink },
+  primary: { backgroundColor: tokens.color.white, color: tokens.color.bg },
   outline: { backgroundColor: tokens.color.bg, color: tokens.color.ink, border: `1.5px solid ${tokens.color.line2}` },
   ghost: { backgroundColor: 'transparent', color: tokens.color.muted, padding: '8px 16px' },
 }

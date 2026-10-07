@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { serverClient } from '@/lib/supabase'
 import { FilmCard } from '@/components/FilmCard'
-import { Wordmark } from '@/components/Wordmark'
-import { FilmmakerCta } from '@/components/FilmmakerCta'
 import { tokens } from '@/lib/tokens'
 
 export const dynamic = 'force-dynamic'
@@ -22,21 +20,13 @@ export default async function HomePage() {
   const films = await getLiveFilms()
 
   return (
-    <main className="home-main" style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, paddingLeft: '48px', paddingRight: '48px' }}>
+    <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, paddingLeft: '48px', paddingRight: '48px' }}>
 
       {/* Hero */}
       <section className="hero-section" style={{
         display: 'flex',
         flexDirection: 'column',
-        padding: '40px 0 0',
       }}>
-
-        {/* Wordmark */}
-        <img
-          src="/solv-wordmark_2.png"
-          alt="solv"
-          style={{ height: '28px', width: 'auto', display: 'block', alignSelf: 'flex-start' }}
-        />
 
         {/* Headline + subtext + CTA */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -76,7 +66,7 @@ export default async function HomePage() {
         {/* Film strip */}
         {films.length > 0 && (
           <>
-            <div style={{ borderTop: `1px solid ${tokens.color.line}`, margin: '0' }} />
+            <div className="hero-divider" style={{ borderTop: `1px solid ${tokens.color.line}` }} />
             <div
               id="films"
               className="film-strip hero-strip"
@@ -103,15 +93,6 @@ export default async function HomePage() {
 
       </section>
 
-      <FilmmakerCta />
-
-      {/* Footer */}
-      <footer style={{ padding: '48px 0', borderTop: `1px solid ${tokens.color.surface2}` }}>
-        <Wordmark size={28} tracking="-0.5px" color={tokens.color.ink} />
-        <p style={{ color: tokens.color.muted2, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', margin: '8px 0 0' }}>
-          The films that matter.
-        </p>
-      </footer>
 
     </main>
   )

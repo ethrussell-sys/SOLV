@@ -96,16 +96,12 @@ export default function ShareButton({
 
   return (
     <div style={{
-      position: 'fixed',
-      top: 'calc(16px + env(safe-area-inset-top))',
-      right: '16px',
-      zIndex: 50,
+      position: 'relative',
+      zIndex: 30,
+      flexShrink: 0,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-end',
-      gap: '8px',
-      transform: 'translateZ(0)',
-      WebkitTransform: 'translateZ(0)',
     }}>
       <button
         type="button"

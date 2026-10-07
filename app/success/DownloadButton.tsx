@@ -21,8 +21,8 @@ export default function DownloadButton({ title, filmId, purchaseToken }: Props) 
     <a
       href={`/api/download?token=${purchaseToken}`}
       download
-      className="w-full py-4 rounded-2xl text-white text-lg font-semibold tracking-wide text-center active:scale-95 transition-transform block"
-      style={{ backgroundColor: tokens.color.blue }}
+      className="w-full py-4 rounded-2xl text-black text-lg font-semibold tracking-wide text-center active:scale-95 transition-transform block"
+      style={{ backgroundColor: tokens.color.white }}
     >
       Download {title}
     </a>

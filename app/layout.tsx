@@ -3,6 +3,7 @@ import { Geist } from 'next/font/google'
 import { Bebas_Neue } from 'next/font/google'
 import AddToHomeScreen from '@/components/AddToHomeScreen'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 import './globals.css'
 
 const geistSans = Geist({
@@ -57,6 +58,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SiteHeader />
         {children}
         <SiteFooter />
         <AddToHomeScreen />

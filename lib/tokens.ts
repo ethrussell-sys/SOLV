@@ -4,7 +4,7 @@ export const tokens = {
     bg: "#000000", surface: "#0d0d10", surface2: "#111116",
     line: "#1e1e25", line2: "#2a2a33",
     ink: "#f4f4f6", muted: "#8c8c96", muted2: "#6a6a73",
-    blue: "#0A84FF", silver: "#c9ccd4",
+    white: "#ffffff", silver: "#c9ccd4",
   },
   radius: { sm: 8, md: 12, lg: 16, pill: 999 },
   space: (n: number) => n * 4,

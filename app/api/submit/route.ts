@@ -66,11 +66,11 @@ export async function POST(request: Request) {
     to: contactEmail,
     subject: `We have your film — ${title}`,
     html: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Film received</title></head>
-<body style="background:#000;margin:0;padding:48px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0"><tbody><tr><td align="center">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px">
+<body bgcolor="#000000" style="background-color:#000000;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%">
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#000000" style="background-color:#000000;width:100%"><tbody><tr><td align="center" style="padding:48px 24px">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%">
 <tbody>
-<tr><td style="padding-bottom:48px"><span style="color:#0A84FF;font-size:13px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase">S&Oslash;LV</span></td></tr>
+<tr><td style="padding-bottom:48px"><img src="https://solvscreen.com/solv-wordmark-email.png" width="47" height="24" alt="sølv" style="display:block;border:0;height:24px;width:47px;background-color:#000000;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:20px;line-height:24px"></td></tr>
 <tr><td style="padding-bottom:12px"><h1 style="color:#fff;font-size:48px;font-weight:900;margin:0;line-height:1;letter-spacing:-1.5px">We have your film.</h1></td></tr>
 <tr><td style="padding-bottom:40px"><p style="color:#a3a3a3;font-size:18px;margin:0;line-height:1.5">${byline} submission of <em style="color:#fff">${title}</em> has been received.</p></td></tr>
 <tr><td style="padding-bottom:40px"><hr style="border:none;border-top:1px solid #1c1c1c;margin:0"></td></tr>

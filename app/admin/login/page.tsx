@@ -19,7 +19,7 @@ export default async function LoginPage(props: {
       <div className="w-full max-w-sm flex flex-col gap-10">
 
         <div className="flex flex-col gap-3">
-          <Wordmark size={12} tracking="0.25em" color={tokens.color.blue} fontFamily={tokens.font.body} style={{ fontWeight: 700 }} />
+          <Wordmark height={22} />
           <h1
             className="text-5xl uppercase leading-none tracking-tight"
             style={{ fontFamily: tokens.font.display }}
@@ -57,8 +57,8 @@ export default async function LoginPage(props: {
 
           <button
             type="submit"
-            className="w-full py-4 rounded-2xl text-white font-semibold text-base tracking-wide"
-            style={{ backgroundColor: tokens.color.blue }}
+            className="w-full py-4 rounded-2xl text-black font-semibold text-base tracking-wide"
+            style={{ backgroundColor: tokens.color.white }}
           >
             Enter
           </button>
