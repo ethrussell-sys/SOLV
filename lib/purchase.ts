@@ -43,7 +43,7 @@ type PurchaseRow = {
 
 type CreatePurchaseResult = {
   purchase: PurchaseRow
-  film: { id: string; title: string; file_key: string }
+  film: { id: string; title: string; slug: string | null; file_key: string }
   isNew: boolean
   purchaseToken: string
 }
@@ -65,7 +65,7 @@ export async function createOrGetPurchase({
 
   const { data: film } = await db
     .from('films')
-    .select('id, title, file_key')
+    .select('id, title, slug, file_key')
     .eq('id', filmId)
     .single()
 
