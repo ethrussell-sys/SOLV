@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { serverClient } from '@/lib/supabase'
 import { FilmCard } from '@/components/FilmCard'
 import { Wordmark } from '@/components/Wordmark'
+import { FilmmakerCta } from '@/components/FilmmakerCta'
 import { tokens } from '@/lib/tokens'
 
 export const dynamic = 'force-dynamic'
@@ -21,7 +22,7 @@ export default async function HomePage() {
   const films = await getLiveFilms()
 
   return (
-    <main style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, paddingLeft: '48px', paddingRight: '48px' }}>
+    <main className="home-main" style={{ backgroundColor: tokens.color.bg, color: tokens.color.ink, paddingLeft: '48px', paddingRight: '48px' }}>
 
       {/* Hero */}
       <section className="hero-section" style={{
@@ -102,8 +103,10 @@ export default async function HomePage() {
 
       </section>
 
+      <FilmmakerCta />
+
       {/* Footer */}
-      <footer style={{ padding: '48px 24px', borderTop: `1px solid ${tokens.color.surface2}` }}>
+      <footer style={{ padding: '48px 0', borderTop: `1px solid ${tokens.color.surface2}` }}>
         <Wordmark size={28} tracking="-0.5px" color={tokens.color.ink} />
         <p style={{ color: tokens.color.muted2, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', margin: '8px 0 0' }}>
           The films that matter.

@@ -25,9 +25,9 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL
-    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-    : undefined,
+  // Absolute og:image / twitter:image URLs always point at the production
+  // domain, whatever host the deployment is served from.
+  metadataBase: new URL('https://solvscreen.com'),
   title: 'Sølv',
   description: 'Yours to keep. No expiry. One tap, $1.99.',
   appleWebApp: {
